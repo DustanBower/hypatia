@@ -7,7 +7,6 @@
 
 SOURCE="websource"
 
-rm *.html
 cd "${SOURCE}"
 
 for relative_adoc_path in **.adoc
@@ -16,5 +15,6 @@ do
     mkdir -p "${relative_adoc_dirname}"
     adoc_name_no_ext=$(basename "${relative_adoc_path}" .adoc)
     html_file_path="../${relative_adoc_dirname}/${adoc_name_no_ext}.html"
+    rm "${html_file_path}"
     asciidoc "-o" "${html_file_path}" "-a" "toc2" "${relative_adoc_path}"
 done

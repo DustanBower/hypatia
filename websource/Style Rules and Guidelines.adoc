@@ -1,0 +1,44 @@
+= Style Rules and Guidelines
+:Author:    Lillian Lemmer; Tom Almquist; Micah Getman
+:Date:      2015-06-04T04:08
+:numbered:
+
+== Document Purpose
+
+The purpose of this document is to define the "dos and don'ts" of the Hypatia game and universe.
+
+It could also define some aspects of the graphical artistic design and vision.
+
+This is a prior component to the actual _game design doc_ which will in turn influence the _technical/engine design doc_, which will influence the _engine api_.
+
+== Game Mechanics
+
+=== Dont's
+
+  * No explaining game mechanics through text
+
+=== Dos
+
+  * Boss must be beatable by programmer without being hit once
+  * items must all be manually programmed behavior. An item is a pattern or behavior which may be embued with attributes through an accessory. No guns, swords, damage sink weapons. No walking up and hitting the enemy. All weird, quirky strategic items.
+  * accessories embue magic like multipliers to weapons, or player speed, embueing flame or ice to an item, etc.
+  * item = pattern/behavior, ring = attributes
+  * Dungeons
+  * Centralized hub, a survivor "society"
+
+== Themes & Settings
+
+=== Dos
+
+  * Mirroring, inverting, reversing, palindromes. The first part is non-deterministic; your interactions ith the people around ou define how a ghost of your decisons interact with you again later in the game. Your later, female version responds deterministiaclly to non-deterministic actions from the man version (earlier version)s.
+
+    ** First  you are a guy and can buy a girl things, make the user think "if i keep buying them something, they'll do something cool," then later on give the player an option to get angry for not getting anything in return; if they get angry, later on a guy will come up to you and keep givnig you stuff, and then get angry at you for not returning the favor
+
+  * Dungeons are mainframes
+  * Vaporwave influences consistent
+  * Resources salvaged from other mainframes/temples aid the good mainframe's AI/people so they can make clinics, new items, shops, automagically based on progress and resources salvaged.
+  * Game divided into halfs; first half like Adventure Time second half like Yume Nikki; representation of mania/depression, constant references to various mental illnesses, e.g., PTSD, schizophrenia, body dysmorphia, anything we can fit in, with the most stressful or scary of the symptoms saved for the last part of the game.
+  * Post-apocalyptic post-singularity 
+  * Player exists in one of the last safe/quarantined mainframes, with a bunch of other survivors. Almost all other mainframes in the singularity have become supposedly infected.
+  * You think you're righteous smiting monsters of temples/mainframes, salvaging equipment, but it changes the ecology and adds momentum toward the "crazy/bad/glitchy" part of the game. _the bad_
+

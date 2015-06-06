@@ -1,0 +1,13 @@
+= Preface
+
+This is an outline I started for the API documentation. I still have to finish the Design Requirements and the general/summary API doc.
+
+= Tilemaps
+
+A tilemap is basically a bunch of cells. Each cell has a tile. A tile has some meta data, plus it has a reference to an image/tile from a tilesheet.
+
+== TileSheet(): a class for tilesheets
+
+A tilemap is constructed utilizing data/files from an archive in the tilemap directory. By default, tilemap zip archives are kept in +resources/tilesheets+.
+A tile map is constructed utilizing data from a tilemap directory. By default, tilemaps are kept in 
+

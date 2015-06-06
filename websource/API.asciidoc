@@ -1,0 +1,57 @@
+= Hypatia Engine API
+
+The API is based on the Design Requirements document. This document was written prior to code, it is the guideline to which an interface is provided.
+
+The requirements doc isn't finished yet, but here's some notes:
+
+   * The API will be broken down into several pages
+   * This document will act as an overview and summary as well as an index
+   * This document will provide an example script (the simplest possible ["quick setup"]) as well as links to other usage examples, example projects
+
+= Notes
+
+Below are notes I jotted down at some point in time which are by no means an official API, or an API to be implemented. They are solely as suggested and rememberence. The Design Requirements must be formulated prior to the API, which has not been achieved, yet.
+
+== Rooms Module
+
+A room is a place for various game entities/parts of the API to interact with each other, e.g., a player interacting with the environment or enemies.
+
+=== Room Class
+
+A room hosts and delegates the interaction between objects, provided an environment. 
+
+Room has the following attributes:
+
+  * Room.objects: the objects/entities active/associated in the room. E.g.,, enemies.
+  * Room.impassable: list of pygame.Rect which define areas which cannot be walked over.
+  * Room.background: background pygame.Surface to tile, or pygame.Color.
+  * Room.environment: either TileMap or Canvas.
+
+==== Examples
+
+To create a room, you at least need a TileMap or Canvas.
+
+----
+room = rooms.Room(tilemap=tilemap, objects=objects)
+----
+
+=== TileMap Class
+
+This is a type of room.
+
+  * Graphical and data manipulations specific to TileMaps
+
+==== Examples
+
+----
+tilemap = rooms.TileMap(...)
+----
+
+== Sprites
+
+=== Walkabout Sprites 
+
+== Render
+
+=== render_room
+

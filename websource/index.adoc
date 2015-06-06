@@ -1,0 +1,17 @@
+= Hypatia: 2D Adventure Game Engine
+
+image:https://raw.githubusercontent.com/lillian-lemmer/hypatia/master/media/logo/logo%20%28397x92%29.png[Hypatia]
+
+This site hosts drafts, documents related to Hypatia.
+
+== Please Donate
+
+Please, link:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YFHB5TMMXMNT6[make a donation, securely with PayPal], no account or sign up required.
+
+== Resources
+
+  * link:https://github.com/lillian-lemmer/hypatia[Hypatia GitHub repo]
+  * link:https://github.com/lillian-lemmer/hypatia/wiki[Hypatia GitHub wiki]
+  * link:https://github.com/lillian-lemmer/hypatia/wiki/About-the-Creator[About the creator]
+  * Official IRC channel +#hypatia+ on link:http://irc.lillian.link/[irc.lillian.link]
+

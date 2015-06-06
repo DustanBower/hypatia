@@ -4,6 +4,10 @@ image:https://raw.githubusercontent.com/lillian-lemmer/hypatia/master/media/logo
 
 This site hosts drafts, documents related to Hypatia.
 
+----
+Test.
+----
+
 == Please Donate
 
 Please, link:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YFHB5TMMXMNT6[make a donation, securely with PayPal], no account or sign up required.

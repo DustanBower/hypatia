@@ -2,7 +2,7 @@
 
 image:https://raw.githubusercontent.com/lillian-lemmer/hypatia/master/media/logo/logo%20%28397x92%29.png[Hypatia]
 
-This site hosts drafts, documents related to Hypatia.
+This site hosts drafts, documents related to Hypatia. It is hosted through the +gh-pages+ branch of the Hypatia GitHub repository.
 
 == Please Donate
 

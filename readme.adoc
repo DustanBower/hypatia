@@ -1,6 +1,6 @@
 = Hypatia Website
 
-link:http://lillian-lemmer.github.io/[hypatia website]
+link:https://lillian-lemmer.github.io/hypatia/[Hypatia Website]
 
 This is the branch for the Hypatia website. I use a ZSH script (+makewiki.sh+) to make HTML pages from ASCIIDoc files in the +websource/+ directory.
 

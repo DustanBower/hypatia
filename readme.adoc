@@ -2,11 +2,11 @@
 
 link:https://lillian-lemmer.github.io/hypatia/[Hypatia Website]
 
-This is the branch for the Hypatia website. I use a ZSH script (+makewiki.sh+) to make HTML pages from ASCIIDoc files in the +websource/+ directory.
+This is the branch for the Hypatia website. I use a ZSH script (+mksite.sh+) to make HTML pages from ASCIIDoc files in the +websource/+ directory.
 
 == How to develop with this system
 
-The +websource/+ directory contains ASCIIDoc files with the extension +.adoc+. These files are parsed with ASCIIDoc and generates HTML in the +gh-pages+ project root. Make sure to run +makewiki.sh+ in the +gh-pages+ project root.
+The +websource/+ directory contains ASCIIDoc files with the extension +.adoc+. These files are parsed with ASCIIDoc and generates HTML in the +gh-pages+ project root. Make sure to run +mksite.sh+ in the +gh-pages+ project root.
 
-Don't forget to +chmod +x makewiki.sh+ and you run with +./makewiki.sh+.
+Don't forget to +chmod +x mksite.sh+ and you run with +./mksite.sh+.
 

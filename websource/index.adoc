@@ -1,6 +1,6 @@
 = Hypatia: 2D Adventure Game Engine
 
-image:https://raw.githubusercontent.com/lillian-lemmer/hypatia/master/media/logo/logo%20%28397x92%29.png[Hypatia]
+image:https://raw.githubusercontent.com/lillian-lemmer/hypatia/master/media/logo/logo%20%28185x46%29.png[Hypatia]
 
 == Support this project
 

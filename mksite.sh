@@ -22,7 +22,7 @@ do
         # file is larger than 2kb, better use enumerated sections
         asciidoc "-n" "-o" "${html_file_path}" "-a" "toc2" "${relative_adoc_path}"
     else
-        asciidoc "-o" "${html_file_path}" "-a" "toc2" "${relative_adoc_path}"
+        asciidoc "-o" "${html_file_path}" "${relative_adoc_path}"
     fi
     echo
 done

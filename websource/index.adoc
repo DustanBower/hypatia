@@ -2,37 +2,13 @@
 
 image:https://raw.githubusercontent.com/lillian-lemmer/hypatia/master/media/logo/logo%20%28397x92%29.png[Hypatia]
 
-This site hosts drafts, documents related to Hypatia. It is hosted through the +gh-pages+ branch of the Hypatia GitHub repository.
+== Support this project
 
-== Please Donate
+We want to give back to the community to our fullest potential. Unfortunately, some things just cost money; there are things we need to buy and people we need to hire. There are three ways to donate to the Hypatia project (none of which require a sign in):
 
-=== Paypal
-
-Please, link:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YFHB5TMMXMNT6[make a donation, securely with PayPal], no account or sign up required.
-
-++++
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="YFHB5TMMXMNT6">
-<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
-</form>
-++++
-
-=== Gratipay
-
-You can also manually checkout link:https://gratipay.com/~lillian-lemmer/[the creator's Gratipay profile], or:
-
-++++
-<script data-gratipay-username="lillian-lemmer"
-        src="//grtp.co/v1.js"></script>
-++++
-
-++++
-<script data-gratipay-username="lillian-lemmer"
-        data-gratipay-widget="button"
-        src="//grtp.co/v1.js"></script>
-++++
+  * link:https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=YFHB5TMMXMNT6[Donate through PayPal]
+  * link:https://www.bountysource.com/teams/hypatia[Donate, or demand features in exchange for cash, through Bountysource] image:https://img.shields.io/bountysource/team/hypatia/activity.svg[Bountysource]
+  * link:https://gratipay.com/~lillian-lemmer/[Donate through Gratipay] image:https://img.shields.io/gratipay/lillian-lemmer.svg[Gratipay]
 
 == Resources
 

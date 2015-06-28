@@ -1,6 +1,7 @@
-This directory is for:
+This directory is for multimedia:
 
-  * finalized documents, e.g., design documents
+  * finalized documents, e.g., design documents (pdf)
+  * icons
   * logos
-  * press releases
+  * recordings
 

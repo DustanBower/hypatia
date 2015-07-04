@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hypatia.render &mdash; hypatia  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="hypatia  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">hypatia  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hypatia.render</h1><div class="highlight"><pre>
+<span class="c"># engine/render.py</span>
+<span class="c"># Lillian Lemmer &lt;lillian.lynn.lemmer@gmail.com&gt;</span>
+<span class="c">#</span>
+<span class="c"># This module is part of Hypatia and is released under the</span>
+<span class="c"># MIT License: http://opensource.org/licenses/MIT</span>
+
+<span class="sd">&quot;&quot;&quot;How stuff is drawn; spite and surface manipulation.</span>
+
+<span class="sd">Includes screen, viewport, and surface/animation manipulation.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">pyganim</span>
+<span class="kn">from</span> <span class="nn">pygame.locals</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">constants</span>
+
+
+<div class="viewcode-block" id="Screen"><a class="viewcode-back" href="../../hypatia.html#hypatia.render.Screen">[docs]</a><span class="k">class</span> <span class="nc">Screen</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Everything blits to screen!</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">      --</span>
+
+<span class="sd">    CONSTANTS:</span>
+<span class="sd">      FPS (int): frames per second limit</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">      clock (pygame.time.Clock):</span>
+<span class="sd">      time_elapsed_milliseconds (int): the time difference between</span>
+<span class="sd">        the two most recent frames/updates in milliseconds.</span>
+<span class="sd">      screen_size (tuple):</span>
+<span class="sd">      screen (pygame.display surface): --</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">FPS</span> <span class="o">=</span> <span class="mi">60</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filters</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Will init pygame.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          filters (list): list of functions which takes and</span>
+<span class="sd">            returns a surface.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">pygame</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">mouse</span><span class="o">.</span><span class="n">set_visible</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">clock</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">Clock</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_elapsed_milliseconds</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">display_info</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">Info</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">display_info</span><span class="o">.</span><span class="n">current_w</span><span class="p">,</span> <span class="n">display_info</span><span class="o">.</span><span class="n">current_h</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">set_mode</span><span class="p">(</span>
+                                              <span class="bp">self</span><span class="o">.</span><span class="n">screen_size</span><span class="p">,</span>
+                                              <span class="n">FULLSCREEN</span> <span class="o">|</span> <span class="n">DOUBLEBUF</span>
+                                             <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filters</span> <span class="o">=</span> <span class="n">filters</span>
+
+<div class="viewcode-block" id="Screen.update"><a class="viewcode-back" href="../../hypatia.html#hypatia.render.Screen.update">[docs]</a>    <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Update the screen; apply surface to screen, automatically</span>
+<span class="sd">        rescaling for fullscreen.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">scaled_surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">transform</span><span class="o">.</span><span class="n">scale</span><span class="p">(</span><span class="n">surface</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen_size</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">:</span>
+
+            <span class="k">for</span> <span class="n">filter_function</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">filters</span><span class="p">:</span>
+                <span class="n">scaled_surface</span> <span class="o">=</span> <span class="n">filter_function</span><span class="p">(</span><span class="n">scaled_surface</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">scaled_surface</span><span class="p">,</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">pygame</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">flip</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time_elapsed_milliseconds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">clock</span><span class="o">.</span><span class="n">tick</span><span class="p">(</span><span class="n">Screen</span><span class="o">.</span><span class="n">FPS</span><span class="p">)</span>
+
+
+<span class="c"># how much of this is redundant due to pygame Surface.scroll?</span></div></div>
+<div class="viewcode-block" id="Viewport"><a class="viewcode-back" href="../../hypatia.html#hypatia.render.Viewport">[docs]</a><span class="k">class</span> <span class="nc">Viewport</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Display only a fixed area of a surface.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">      surface (pygame.Surface): viewport surface</span>
+<span class="sd">      rect (pygame.Rect): viewable coordinates</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">size</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          size (tuple): (int x, int y) pixel dimensions of viewport.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">          &gt;&gt;&gt; viewport = Viewport(master_surface, (320, 240))</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">size</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Viewport.center_on"><a class="viewcode-back" href="../../hypatia.html#hypatia.render.Viewport.center_on">[docs]</a>    <span class="k">def</span> <span class="nf">center_on</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">master_rect</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Center the viewport rectangle on an object.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">          entity must have entity.rect (pygame.Rect)</span>
+
+<span class="sd">          Does not center if centering would render off-surface;</span>
+<span class="sd">          finds nearest.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          entity: something with an attribute &quot;rect&quot; which value is</span>
+<span class="sd">            a pygame.Rect.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">          bool: --</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">entity_position_x</span><span class="p">,</span> <span class="n">entity_position_y</span> <span class="o">=</span> <span class="n">entity</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">center</span>
+        <span class="n">difference_x</span> <span class="o">=</span> <span class="n">entity_position_x</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">centerx</span>
+        <span class="n">difference_y</span> <span class="o">=</span> <span class="n">entity_position_y</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">centery</span>
+        <span class="n">potential_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">difference_x</span><span class="p">,</span> <span class="n">difference_y</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">potential_rect</span><span class="o">.</span><span class="n">left</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">difference_x</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">potential_rect</span><span class="o">.</span><span class="n">top</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">difference_y</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">potential_rect</span><span class="o">.</span><span class="n">right</span> <span class="o">&gt;</span> <span class="n">master_rect</span><span class="o">.</span><span class="n">right</span><span class="p">:</span>
+            <span class="n">difference_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">difference_x</span> <span class="o">-</span>
+                            <span class="p">(</span><span class="n">potential_rect</span><span class="o">.</span><span class="n">right</span> <span class="o">-</span> <span class="n">master_rect</span><span class="o">.</span><span class="n">right</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">potential_rect</span><span class="o">.</span><span class="n">bottom</span> <span class="o">&gt;</span> <span class="n">master_rect</span><span class="o">.</span><span class="n">bottom</span><span class="p">:</span>
+            <span class="n">difference_y</span> <span class="o">=</span> <span class="p">(</span><span class="n">difference_y</span> <span class="o">-</span>
+                            <span class="p">(</span><span class="n">potential_rect</span><span class="o">.</span><span class="n">bottom</span> <span class="o">-</span> <span class="n">master_rect</span><span class="o">.</span><span class="n">bottom</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">move_ip</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">difference_x</span><span class="p">,</span> <span class="n">difference_y</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="Viewport.relative_position"><a class="viewcode-back" href="../../hypatia.html#hypatia.render.Viewport.relative_position">[docs]</a>    <span class="k">def</span> <span class="nf">relative_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">position</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">topleft</span>
+        <span class="n">x</span> <span class="o">-=</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">-=</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">position_on_screen</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">position_on_screen</span>
+</div>
+<div class="viewcode-block" id="Viewport.blit"><a class="viewcode-back" href="../../hypatia.html#hypatia.render.Viewport.blit">[docs]</a>    <span class="k">def</span> <span class="nf">blit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Draw the correct portion of supplied surface onto viewport.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          surface (pygame.Surface): will only draw the area described</span>
+<span class="sd">            by viewport coordinates.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">          &gt;&gt;&gt; viewport.blit(tilemap.layer_images[0])</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">surface</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
+                          <span class="n">surface</span><span class="p">,</span>
+                          <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
+                          <span class="bp">self</span><span class="o">.</span><span class="n">rect</span>
+                         <span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="pil_to_pygame"><a class="viewcode-back" href="../../hypatia.html#hypatia.render.pil_to_pygame">[docs]</a><span class="k">def</span> <span class="nf">pil_to_pygame</span><span class="p">(</span><span class="n">pil_image</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert PIL Image() to pygame Surface.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">      NOT for animations, use Animation() for that!</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">      pil_image (Image): image to convert to pygame.Surface().</span>
+<span class="sd">      encoding (str): image encoding, e.g., RGBA</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">      pygame.Surface: the converted image</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">       &gt;&gt;&gt; pil_to_pygame(gif, &quot;RGBA&quot;)</span>
+<span class="sd">       &lt;pygame.Surface&gt;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">image_as_string</span> <span class="o">=</span> <span class="n">pil_image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">&#39;RGBA&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tostring</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span>
+                                   <span class="n">image_as_string</span><span class="p">,</span>
+                                   <span class="n">pil_image</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                                   <span class="s">&#39;RGBA&#39;</span>
+                                  <span class="p">)</span>
+
+
+<span class="c"># HUGELY IMPORTANT NOTE TO GO SOMEWHERE:</span>
+<span class="c"># YUO CANNOT MIX SURFACES OF VARYING BITDEPTHS/SETTINGS.</span>
+<span class="c"># IF YOU TRY TO DRAW AN 8 BIT IMAGE ON A 32 BIT SURFACE IT</span>
+<span class="c"># WON&#39;T SHOW UP</span>
+
+
+<span class="c"># should go into sprites or effects</span></div>
+<div class="viewcode-block" id="palette_cycle"><a class="viewcode-back" href="../../hypatia.html#hypatia.render.palette_cycle">[docs]</a><span class="k">def</span> <span class="nf">palette_cycle</span><span class="p">(</span><span class="n">surface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get_palette is not sufficient; it generates superflous colors.</span>
+
+<span class="sd">    surface (pygame.Surface): 8 bit surface</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">original_surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c"># don&#39;t touch! used for later calc</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
+    <span class="n">ordered_color_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">seen_colors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)):</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">(</span><span class="n">coordinate</span><span class="p">)</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">seen_colors</span><span class="p">:</span>
+
+            <span class="k">continue</span>
+
+        <span class="n">ordered_color_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">seen_colors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+
+    <span class="c"># reverse the color list but not the pixel arrays, then replace!</span>
+    <span class="n">old_color_list</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">(</span><span class="n">ordered_color_list</span><span class="p">)</span>
+    <span class="n">new_surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">rotation_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ordered_color_list</span><span class="p">)):</span>
+        <span class="n">new_surface</span> <span class="o">=</span> <span class="n">new_surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">new_color_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">old_color_list</span><span class="p">)</span>
+        <span class="n">new_color_list</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">color_translations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">old_color_list</span><span class="p">,</span> <span class="n">new_color_list</span><span class="p">))</span>
+
+        <span class="c"># replace each former color with the color from newcolor_list</span>
+        <span class="k">for</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)):</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">new_surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">(</span><span class="n">coordinate</span><span class="p">)</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+            <span class="n">new_color</span> <span class="o">=</span> <span class="n">color_translations</span><span class="p">[</span><span class="n">color</span><span class="p">]</span>
+            <span class="n">new_surface</span><span class="o">.</span><span class="n">set_at</span><span class="p">(</span><span class="n">coordinate</span><span class="p">,</span> <span class="n">new_color</span><span class="p">)</span>
+
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">new_surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">frame</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+        <span class="n">old_color_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">new_color_list</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pyganim</span><span class="o">.</span><span class="n">PygAnimation</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">hypatia  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

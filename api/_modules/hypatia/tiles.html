@@ -125,7 +125,7 @@
 
 <span class="sd">        Examples:</span>
 <span class="sd">          Make a 2x2x1 tilemap:</span>
-<span class="sd">          &gt;&gt;&gt; tiles = [[0, 0], [0, 0]]</span>
+<span class="sd">          &gt;&gt;&gt; tiles = [[[0, 0], [0, 0]]]</span>
 <span class="sd">          &gt;&gt;&gt; tilemap = TileMap(&#39;debug&#39;, tiles)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -211,9 +211,9 @@
 <span class="sd">          TileProperties</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">          &gt;&gt;&gt; tiles = [[&#39;default&#39;, &#39;default&#39;], [&#39;default&#39;, &#39;water&#39;]]</span>
+<span class="sd">          &gt;&gt;&gt; tiles = [[[0, 0], [0, 0]]]</span>
 <span class="sd">          &gt;&gt;&gt; tilemap = TileMap(&#39;debug&#39;, tiles)</span>
-<span class="sd">          &gt;&gt;&gt; &#39;impass_all&#39; in tilemap[(1, 1)].properties</span>
+<span class="sd">          &gt;&gt;&gt; &#39;impass_all&#39; in tilemap[(1, 1)].flags</span>
 <span class="sd">          True</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -235,9 +235,9 @@
 
 <span class="sd">        Examples:</span>
 <span class="sd">          Let&#39;s assume 10x10 tiles...</span>
-<span class="sd">          &gt;&gt;&gt; tiles = [[&#39;default&#39;, &#39;default&#39;], [&#39;default&#39;, &#39;water&#39;]]</span>
+<span class="sd">          &gt;&gt;&gt; tiles = [[[0, 10], [-1, 4]]]</span>
 <span class="sd">          &gt;&gt;&gt; tilemap = TileMap(&#39;debug&#39;, tiles)</span>
-<span class="sd">          &gt;&gt;&gt; &#39;impass_all&#39; in tilemap.get_properties((12, 12)).properties</span>
+<span class="sd">          &gt;&gt;&gt; &#39;impass_all&#39; in tilemap.get_info((12, 12)).flags</span>
 <span class="sd">          True</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -525,7 +525,7 @@
 <span class="sd">      6 7 8</span>
 
 <span class="sd">      We can assert that element 8 is of the coordinate (2, 2):</span>
-<span class="sd">      &gt;&gt;&gt; 2 == index_to_coord(3, 2)</span>
+<span class="sd">      &gt;&gt;&gt; (2, 2) == index_to_coord(3, 8)</span>
 <span class="sd">      True</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>

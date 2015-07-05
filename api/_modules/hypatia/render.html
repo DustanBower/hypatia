@@ -148,7 +148,7 @@
 <span class="sd">          size (tuple): (int x, int y) pixel dimensions of viewport.</span>
 
 <span class="sd">        Example:</span>
-<span class="sd">          &gt;&gt;&gt; viewport = Viewport(master_surface, (320, 240))</span>
+<span class="sd">          &gt;&gt;&gt; viewport = Viewport((320, 240))</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -211,7 +211,9 @@
 <span class="sd">            by viewport coordinates.</span>
 
 <span class="sd">        Example:</span>
-<span class="sd">          &gt;&gt;&gt; viewport.blit(tilemap.layer_images[0])</span>
+<span class="sd">          &gt;&gt;&gt; viewport = Viewport((100, 100))</span>
+<span class="sd">          &gt;&gt;&gt; surface = pygame.Surface((800, 600))</span>
+<span class="sd">          &gt;&gt;&gt; viewport.blit(surface)</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -227,7 +229,6 @@
 
 <span class="sd">    Note:</span>
 <span class="sd">      NOT for animations, use Animation() for that!</span>
-
 <span class="sd">    Args:</span>
 <span class="sd">      pil_image (Image): image to convert to pygame.Surface().</span>
 <span class="sd">      encoding (str): image encoding, e.g., RGBA</span>
@@ -236,8 +237,10 @@
 <span class="sd">      pygame.Surface: the converted image</span>
 
 <span class="sd">    Example:</span>
+<span class="sd">       &gt;&gt;&gt; from PIL import Image</span>
+<span class="sd">       &gt;&gt;&gt; gif = Image.open(&#39;resources/walkabouts/debug/walk_up.gif&#39;)</span>
 <span class="sd">       &gt;&gt;&gt; pil_to_pygame(gif, &quot;RGBA&quot;)</span>
-<span class="sd">       &lt;pygame.Surface&gt;</span>
+<span class="sd">       &lt;Surface(6x8x32 SW)&gt;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -250,17 +253,13 @@
                                   <span class="p">)</span>
 
 
-<span class="c"># HUGELY IMPORTANT NOTE TO GO SOMEWHERE:</span>
-<span class="c"># YUO CANNOT MIX SURFACES OF VARYING BITDEPTHS/SETTINGS.</span>
-<span class="c"># IF YOU TRY TO DRAW AN 8 BIT IMAGE ON A 32 BIT SURFACE IT</span>
-<span class="c"># WON&#39;T SHOW UP</span>
-
-
 <span class="c"># should go into sprites or effects</span></div>
 <div class="viewcode-block" id="palette_cycle"><a class="viewcode-back" href="../../hypatia.html#hypatia.render.palette_cycle">[docs]</a><span class="k">def</span> <span class="nf">palette_cycle</span><span class="p">(</span><span class="n">surface</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;get_palette is not sufficient; it generates superflous colors.</span>
 
-<span class="sd">    surface (pygame.Surface): 8 bit surface</span>
+<span class="sd">    Note:</span>
+<span class="sd">      Need to see if I can convert 32bit alpha to 8 bit temporarily,</span>
+<span class="sd">      to be converted back at end of palette/color manipulations.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

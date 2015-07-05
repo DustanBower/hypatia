@@ -154,9 +154,10 @@
 <span class="sd">          isn&#39;t defined for frame.</span>
 
 <span class="sd">        Example:</span>
-<span class="sd">          &gt;&gt;&gt; animation_anchors = AnimAnchors(&#39;default.gif&#39;)</span>
+<span class="sd">          &gt;&gt;&gt; path = &#39;resources/walkabouts/debug/walk_up.gif&#39;</span>
+<span class="sd">          &gt;&gt;&gt; animation_anchors = AnimAnchors(path)</span>
 <span class="sd">          &gt;&gt;&gt; animation_anchors.get_anchor_point(&#39;head_anchor&#39;, 0)</span>
-<span class="sd">          (2, 3)</span>
+<span class="sd">          &lt;hypatia.sprites.AnchorPoint object at 0x...&gt;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -284,7 +285,8 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">          &gt;&gt;&gt; hat = Walkabout(&#39;hat&#39;)</span>
-<span class="sd">          &gt;&gt;&gt; walkabout = Walkabout(position=(44, 55), children=[hat])</span>
+<span class="sd">          &gt;&gt;&gt; Walkabout(&#39;debug&#39;, position=(44, 55), children=[hat])</span>
+<span class="sd">          &lt;hypatia.sprites.Walkabout object at 0x...&gt;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -374,9 +376,9 @@
 <span class="sd">          dict: sprites associated with action supplied (key)</span>
 
 <span class="sd">        Examples:</span>
-<span class="sd">          &gt;&gt;&gt; walkabout = Walkabout()</span>
+<span class="sd">          &gt;&gt;&gt; walkabout = Walkabout(&#39;debug&#39;)</span>
 <span class="sd">          &gt;&gt;&gt; walkabout[constants.Action.Walk][constants.Direction.Up]</span>
-<span class="sd">          &lt;PygAnim Object&gt;</span>
+<span class="sd">          &lt;pyganim.PygAnimation object at 0x...&gt;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -391,9 +393,9 @@
 <span class="sd">            current action and direction.</span>
 
 <span class="sd">        Example:</span>
-<span class="sd">          &gt;&gt;&gt; walkabout = Walkabout()</span>
+<span class="sd">          &gt;&gt;&gt; walkabout = Walkabout(&#39;debug&#39;)</span>
 <span class="sd">          &gt;&gt;&gt; walkabout.current_animation()</span>
-<span class="sd">          &lt;PygAnim Object&gt;</span>
+<span class="sd">          &lt;pyganim.PygAnimation object at 0x...&gt;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -541,8 +543,8 @@
 <span class="sd">        referenced in gif_path.</span>
 
 <span class="sd">    Example:</span>
-<span class="sd">      &gt;&gt;&gt; load_gif(&#39;default.gif&#39;)</span>
-<span class="sd">      &lt;PygAnim Object&gt;</span>
+<span class="sd">      &gt;&gt;&gt; load_gif(&#39;resources/walkabouts/debug/walk_up.gif&#39;)</span>
+<span class="sd">      &lt;pyganim.PygAnimation object at 0x...&gt;</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 

@@ -99,10 +99,10 @@ Trying to delete this property raises a TypeError.</p>
 direction and action specifications. These classes are to be passed as
 parameters.</p>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">sprites</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sprite</span> <span class="o">=</span> <span class="n">sprites</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">sprites</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sprite</span> <span class="o">=</span> <span class="n">sprites</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sprite</span><span class="o">.</span><span class="n">animations</span><span class="p">[</span><span class="n">Action</span><span class="o">.</span><span class="n">Walk</span><span class="p">][</span><span class="n">Direction</span><span class="o">.</span><span class="n">Right</span><span class="p">]</span>
-<span class="go">&lt;Animation Object&gt;</span>
+<span class="go">&lt;pyganim.PygAnimation object at 0x...&gt;</span>
 </pre></div>
 </div>
 <dl class="class">
@@ -404,7 +404,9 @@ by viewport coordinates.</td>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">viewport</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">tilemap</span><span class="o">.</span><span class="n">layer_images</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">viewport</span> <span class="o">=</span> <span class="n">Viewport</span><span class="p">((</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">surface</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Surface</span><span class="p">((</span><span class="mi">800</span><span class="p">,</span> <span class="mi">600</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">viewport</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">surface</span><span class="p">)</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -445,7 +447,11 @@ a pygame.Rect.</td>
 <dt id="hypatia.render.palette_cycle">
 <tt class="descclassname">hypatia.render.</tt><tt class="descname">palette_cycle</tt><big>(</big><em>surface</em><big>)</big><a class="reference internal" href="_modules/hypatia/render.html#palette_cycle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.render.palette_cycle" title="Permalink to this definition">¶</a></dt>
 <dd><p>get_palette is not sufficient; it generates superflous colors.</p>
-<p>surface (pygame.Surface): 8 bit surface</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Need to see if I can convert 32bit alpha to 8 bit temporarily,
+to be converted back at end of palette/color manipulations.</p>
+</div>
 </dd></dl>
 
 <dl class="function">
@@ -475,8 +481,10 @@ a pygame.Rect.</td>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">pil_to_pygame</span><span class="p">(</span><span class="n">gif</span><span class="p">,</span> <span class="s">&quot;RGBA&quot;</span><span class="p">)</span>
-<span class="go">&lt;pygame.Surface&gt;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gif</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s">&#39;resources/walkabouts/debug/walk_up.gif&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pil_to_pygame</span><span class="p">(</span><span class="n">gif</span><span class="p">,</span> <span class="s">&quot;RGBA&quot;</span><span class="p">)</span>
+<span class="go">&lt;Surface(6x8x32 SW)&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -624,9 +632,10 @@ index.</p>
 isn&#8217;t defined for frame.</p>
 </div>
 <p class="rubric">Example</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">animation_anchors</span> <span class="o">=</span> <span class="n">AnimAnchors</span><span class="p">(</span><span class="s">&#39;default.gif&#39;</span><span class="p">)</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;resources/walkabouts/debug/walk_up.gif&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">animation_anchors</span> <span class="o">=</span> <span class="n">AnimAnchors</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">animation_anchors</span><span class="o">.</span><span class="n">get_anchor_point</span><span class="p">(</span><span class="s">&#39;head_anchor&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="go">(2, 3)</span>
+<span class="go">&lt;hypatia.sprites.AnchorPoint object at 0x...&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -721,9 +730,9 @@ this action (key).</td>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">walkabout</span> <span class="o">=</span> <span class="n">Walkabout</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">walkabout</span> <span class="o">=</span> <span class="n">Walkabout</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">walkabout</span><span class="p">[</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Walk</span><span class="p">][</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Up</span><span class="p">]</span>
-<span class="go">&lt;PygAnim Object&gt;</span>
+<span class="go">&lt;pyganim.PygAnimation object at 0x...&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -769,9 +778,9 @@ current action and direction.</td>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">walkabout</span> <span class="o">=</span> <span class="n">Walkabout</span><span class="p">()</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">walkabout</span> <span class="o">=</span> <span class="n">Walkabout</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">walkabout</span><span class="o">.</span><span class="n">current_animation</span><span class="p">()</span>
-<span class="go">&lt;PygAnim Object&gt;</span>
+<span class="go">&lt;pyganim.PygAnimation object at 0x...&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -847,8 +856,8 @@ referenced in gif_path.</td>
 </tbody>
 </table>
 <p class="rubric">Example</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">load_gif</span><span class="p">(</span><span class="s">&#39;default.gif&#39;</span><span class="p">)</span>
-<span class="go">&lt;PygAnim Object&gt;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">load_gif</span><span class="p">(</span><span class="s">&#39;resources/walkabouts/debug/walk_up.gif&#39;</span><span class="p">)</span>
+<span class="go">&lt;pyganim.PygAnimation object at 0x...&gt;</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -948,9 +957,9 @@ z-index (it&#8217;s not a pixel value)</td>
 </tbody>
 </table>
 <p class="rubric">Examples</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tiles</span> <span class="o">=</span> <span class="p">[[</span><span class="s">&#39;default&#39;</span><span class="p">,</span> <span class="s">&#39;default&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s">&#39;default&#39;</span><span class="p">,</span> <span class="s">&#39;water&#39;</span><span class="p">]]</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">tiles</span> <span class="o">=</span> <span class="p">[[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]]]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">tilemap</span> <span class="o">=</span> <span class="n">TileMap</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">,</span> <span class="n">tiles</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;impass_all&#39;</span> <span class="ow">in</span> <span class="n">tilemap</span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">properties</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;impass_all&#39;</span> <span class="ow">in</span> <span class="n">tilemap</span><span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]</span><span class="o">.</span><span class="n">flags</span>
 <span class="go">True</span>
 </pre></div>
 </div>
@@ -985,9 +994,9 @@ Coord only has to be in the area of tile.</td>
 </table>
 <p class="rubric">Examples</p>
 <p>Let&#8217;s assume 10x10 tiles...
-&gt;&gt;&gt; tiles = [[&#8216;default&#8217;, &#8216;default&#8217;], [&#8216;default&#8217;, &#8216;water&#8217;]]
+&gt;&gt;&gt; tiles = [[[0, 10], [-1, 4]]]
 &gt;&gt;&gt; tilemap = TileMap(&#8216;debug&#8217;, tiles)
-&gt;&gt;&gt; &#8216;impass_all&#8217; in tilemap.get_properties((12, 12)).properties
+&gt;&gt;&gt; &#8216;impass_all&#8217; in tilemap.get_info((12, 12)).flags
 True</p>
 </dd></dl>
 
@@ -1097,7 +1106,7 @@ True</p>
 3 4 5
 6 7 8</p>
 <p>We can assert that element 8 is of the coordinate (2, 2):
-&gt;&gt;&gt; 2 == index_to_coord(3, 2)
+&gt;&gt;&gt; (2, 2) == index_to_coord(3, 8)
 True</p>
 </dd></dl>
 

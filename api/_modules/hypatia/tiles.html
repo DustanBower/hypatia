@@ -47,9 +47,6 @@
           <div class="body">
             
   <h1>Source code for hypatia.tiles</h1><div class="highlight"><pre>
-<span class="c"># hypatia/tiles.py</span>
-<span class="c"># Lillian Lemmer &lt;lillian.lynn.lemmer@gmail.com&gt;</span>
-<span class="c">#</span>
 <span class="c"># This module is part of Hypatia and is released under the</span>
 <span class="c"># MIT License: http://opensource.org/licenses/MIT</span>
 
@@ -74,8 +71,8 @@
 <span class="kn">import</span> <span class="nn">pygame</span>
 <span class="kn">import</span> <span class="nn">pyganim</span>
 
-<span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">render</span>
 <span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">util</span>
+<span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">animations</span>
 
 
 <div class="viewcode-block" id="BadTileID"><a class="viewcode-back" href="../../hypatia.html#hypatia.tiles.BadTileID">[docs]</a><span class="k">class</span> <span class="nc">BadTileID</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -446,7 +443,7 @@
 
         <span class="c"># functions which return a PygAnimation, and accept a surface</span>
         <span class="k">if</span> <span class="n">config</span><span class="o">.</span><span class="n">has_section</span><span class="p">(</span><span class="s">&#39;animate_effect&#39;</span><span class="p">):</span>
-            <span class="n">effects</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;cycle&#39;</span><span class="p">:</span> <span class="n">render</span><span class="o">.</span><span class="n">palette_cycle</span><span class="p">}</span>
+            <span class="n">effects</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;cycle&#39;</span><span class="p">:</span> <span class="n">animations</span><span class="o">.</span><span class="n">palette_cycle</span><span class="p">}</span>
 
             <span class="k">for</span> <span class="n">tile_id</span><span class="p">,</span> <span class="n">effect</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="s">&#39;animate_effect&#39;</span><span class="p">):</span>
                 <span class="n">tile_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tile_id</span><span class="p">)</span>

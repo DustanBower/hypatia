@@ -1,0 +1,739 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hypatia.animations &mdash; hypatia  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="hypatia  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">hypatia  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hypatia.animations</h1><div class="highlight"><pre>
+<span class="c"># This module is part of Hypatia and is released under the</span>
+<span class="c"># MIT license: http://opensource.org/licenses/MIT</span>
+
+<span class="sd">&quot;&quot;&quot;Tools for animation. Animation sources are GIFs from disk, which</span>
+<span class="sd">have been made into a PygAnim [1]_ object. Stateful animations which</span>
+<span class="sd">represent objects, e.g., Walkabout represents an Actor.</span>
+
+<span class="sd">References:</span>
+<span class="sd">    .. [1] PygAnim:</span>
+<span class="sd">       http://inventwithpython.com/pyganim/</span>
+
+<span class="sd">Warning:</span>
+<span class="sd">    Sometimes an &quot;animation&quot; can consist of one frame.</span>
+
+<span class="sd">Note:</span>
+<span class="sd">    I wanna add support for loading character animations</span>
+<span class="sd">    from sprite sheets.</span>
+
+<span class="sd">See Also:</span>
+<span class="sd">    The render module. The Actor module.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">ConfigParser</span> <span class="kn">as</span> <span class="nn">configparser</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">configparser</span>
+
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">pyganim</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
+<span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">util</span>
+<span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">render</span>
+<span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">constants</span>
+
+
+<div class="viewcode-block" id="BadWalkabout"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.BadWalkabout">[docs]</a><span class="k">class</span> <span class="nc">BadWalkabout</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The supplied directory has no files which match *.gif. The</span>
+<span class="sd">    walkabout resource specified does not contain any GIFs.</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        Walkabout.__init__()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">supplied_archive</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            supplied_archive (str): Walkabout resource archive which</span>
+<span class="sd">                *should* have contained files of pattern *.gif,</span>
+<span class="sd">                but didn&#39;t.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">(</span><span class="n">BadWalkabout</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">supplied_archive</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="AnimAnchors"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.AnimAnchors">[docs]</a><span class="k">class</span> <span class="nc">AnimAnchors</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The anchors per frame of a PygAnimation. Anchors are</span>
+<span class="sd">    coordinates belonging to a surface, which can be translated</span>
+<span class="sd">    to coordinates belonging to another surface.</span>
+
+<span class="sd">    With AnimAnchors you can keep one animation &quot;pinned&quot; or &quot;glued&quot;</span>
+<span class="sd">    to another. This can help with adding decals to a Walkabout</span>
+<span class="sd">    animation (like a hat!).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        anchor_points (dict): key is anchor label/group, value is a list</span>
+<span class="sd">            of AnchorPoint()s whose index corresponds to respective</span>
+<span class="sd">            PygAnim frame index.</span>
+<span class="sd">        anchor_groups (list): the names/labels of the anchor groups,</span>
+<span class="sd">            e.g., &quot;head_anchor.&quot;</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; resource = util.Resource(&#39;walkabouts&#39;, &#39;debug&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; anchors = AnimAnchors.from_config(resource[&#39;walk_up.ini&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; anchors.anchor_points[&#39;head_anchor&#39;]</span>
+<span class="sd">        [&lt;hypatia.animations.AnchorPoint object at 0x...&gt;, ...]</span>
+<span class="sd">        &gt;&gt;&gt; anchors.anchor_groups</span>
+<span class="sd">        [&#39;head_anchor&#39;]</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        You can modify anchors--there&#39;s no reason they have to be</span>
+<span class="sd">        immutable. You can even build them yourself. Remember the</span>
+<span class="sd">        tall cacti from Mario? How about a spinning mace?</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        AnchorPoint(), Walkabout.blit()</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anchor_points</span><span class="p">,</span> <span class="n">anchor_groups</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">anchor_points</span> <span class="o">=</span> <span class="n">anchor_points</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">anchor_groups</span> <span class="o">=</span> <span class="n">anchor_groups</span>
+
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="AnimAnchors.from_config"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.AnimAnchors.from_config">[docs]</a>    <span class="k">def</span> <span class="nf">from_config</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">anchor_ini</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Instantiate AnimAnchors using the anchor_ini config.</span>
+
+<span class="sd">        The anchor_ini derives from an INI like this:</span>
+
+<span class="sd">            [head_anchor]</span>
+<span class="sd">            0=0,2</span>
+<span class="sd">            1=1,3</span>
+<span class="sd">            2=2,2</span>
+
+<span class="sd">        [head_anchor] is the anchor label. The stuff below it is</span>
+<span class="sd">        head_anchor&#39;s position for frames 0, 1, and 2.</span>
+
+<span class="sd">        In the above example, head_anchor has a coordinate (anchor)</span>
+<span class="sd">        for three different frames: frame 0 at (0, 2), frame 1 at</span>
+<span class="sd">        (1, 3), and frame 2 at (2, 2).</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            anchor_ini should be provided from a Resource(). See</span>
+<span class="sd">            example below.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            anchor_ini (configparser): configparser object.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; resource = util.Resource(&#39;walkabouts&#39;, &#39;debug&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; AnimAnchors.from_config(resource[&#39;walk_up.ini&#39;])</span>
+<span class="sd">            &lt;hypatia.animations.AnimAnchors object at 0x...&gt;</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            AnimAnchors: anchor points and groups collected from an INI</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">anchor_point_groups</span> <span class="o">=</span> <span class="n">anchor_ini</span><span class="o">.</span><span class="n">sections</span><span class="p">()</span>
+
+        <span class="c"># key is group, value is list of frame coord positions</span>
+        <span class="n">anchors</span> <span class="o">=</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">anchor_point_groups</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">anchor_point_group</span> <span class="ow">in</span> <span class="n">anchor_point_groups</span><span class="p">:</span>
+
+            <span class="k">for</span> <span class="n">__</span><span class="p">,</span> <span class="n">frame_anchor</span> <span class="ow">in</span> <span class="n">anchor_ini</span><span class="o">.</span><span class="n">items</span><span class="p">(</span><span class="n">anchor_point_group</span><span class="p">):</span>
+                <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">frame_anchor</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+                <span class="n">anchor_point</span> <span class="o">=</span> <span class="n">AnchorPoint</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
+                <span class="n">anchors</span><span class="p">[</span><span class="n">anchor_point_group</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anchor_point</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">AnimAnchors</span><span class="p">(</span><span class="n">anchors</span><span class="p">,</span> <span class="n">anchor_point_groups</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AnimAnchors.get_anchor_point"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.AnimAnchors.get_anchor_point">[docs]</a>    <span class="k">def</span> <span class="nf">get_anchor_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anchor_point_group</span><span class="p">,</span> <span class="n">frame_index</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return an AnchorPoint corresponding to group name and frame</span>
+<span class="sd">        index.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            anchor_point_group (str): name of the anchor point group</span>
+<span class="sd">            frame_index (int): which frame for group&#39;s anchor</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            AnchorPoint: --</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Will simply return last anchor point for group if an anchor</span>
+<span class="sd">            isn&#39;t defined for frame.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; resource = util.Resource(&#39;walkabouts&#39;, &#39;debug&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; config = resource[&#39;walk_up.ini&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; animation_anchors = AnimAnchors.from_config(config)</span>
+<span class="sd">            &gt;&gt;&gt; animation_anchors.get_anchor_point(&#39;head_anchor&#39;, 0)</span>
+<span class="sd">            &lt;hypatia.animations.AnchorPoint object at 0x...&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">anchor_points</span><span class="p">[</span><span class="n">anchor_point_group</span><span class="p">][</span><span class="n">frame_index</span><span class="p">]</span>
+
+        <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">anchor_points</span><span class="p">[</span><span class="n">anchor_point_group</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+</div></div>
+<div class="viewcode-block" id="AnchorPoint"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.AnchorPoint">[docs]</a><span class="k">class</span> <span class="nc">AnchorPoint</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A coordinate on a surface which is used for pinning to another</span>
+<span class="sd">    surface AnchorPoint. Used when attempting to afix one surface to</span>
+<span class="sd">    another, lining up their corresponding anchorpoints.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        x (int): x-axis coordinate on a surface to place anchor at</span>
+<span class="sd">        y (int): x-axis coordinate on a surface to place anchor at</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an AnchorPoint at coordinate (x, y).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (int): the x-axis pixel position</span>
+<span class="sd">            y (int): the y-axis pixel position</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; anchor_point = AnchorPoint(5, 3)</span>
+<span class="sd">            &gt;&gt;&gt; anchor_point.x</span>
+<span class="sd">            5</span>
+<span class="sd">            &gt;&gt;&gt; anchor_point.y</span>
+<span class="sd">            3</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+
+<div class="viewcode-block" id="AnchorPoint.__add__"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.AnchorPoint.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_anchor_point</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds the x, y values of this and another anchor point.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other_anchor_point (AnchorPoint): the AnchorPoint</span>
+<span class="sd">                coordinates to add to this AnchorPoint&#39;s coordinates.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (x, y) tuple: the new x, y coordinate</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; anchor_point_a = AnchorPoint(4, 1)</span>
+<span class="sd">            &gt;&gt;&gt; anchor_point_b = AnchorPoint(2, 0)</span>
+<span class="sd">            &gt;&gt;&gt; anchor_point_a + anchor_point_b</span>
+<span class="sd">            (6, 1)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">+</span> <span class="n">other_anchor_point</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">+</span> <span class="n">other_anchor_point</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="AnchorPoint.__sub__"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.AnchorPoint.__sub__">[docs]</a>    <span class="k">def</span> <span class="nf">__sub__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_anchor_point</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Find the difference between this anchor and another.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other_anchor_point (AnchorPoint): the AnchorPoint</span>
+<span class="sd">                coordinates to subtract from this</span>
+<span class="sd">                AnchorPoint&#39;s coordinates.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (x, y) tuple: the x, y difference between this</span>
+<span class="sd">                anchor point and the other supplied.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; anchor_point_a = AnchorPoint(4, 1)</span>
+<span class="sd">            &gt;&gt;&gt; anchor_point_b = AnchorPoint(2, 0)</span>
+<span class="sd">            &gt;&gt;&gt; anchor_point_a - anchor_point_b</span>
+<span class="sd">            (2, 1)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="n">other_anchor_point</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">-</span> <span class="n">other_anchor_point</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Walkabout"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.Walkabout">[docs]</a><span class="k">class</span> <span class="nc">Walkabout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sprite animations for a character which walks around.</span>
+
+<span class="sd">    Notes:</span>
+<span class="sd">        The walkabout sprites specified to be therein</span>
+<span class="sd">        walkabout_directory, are files with an action__direction.gif</span>
+<span class="sd">        filename convention.</span>
+
+<span class="sd">        ASSUMPTION: walkabout_directory contains sprites for</span>
+<span class="sd">        walk AND run actions.</span>
+
+<span class="sd">        Blits its children relative to its own anchor.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        resource (Resource): --</span>
+<span class="sd">        animations (dict): 2D dictionary [action][direction] whose</span>
+<span class="sd">            values are PygAnimations.</span>
+<span class="sd">        animation_anchors (dict): 2D dictionary [action][direction]</span>
+<span class="sd">            whose values are AnimAnchors.</span>
+<span class="sd">        rect (pygame.Rect): position on tilemap</span>
+<span class="sd">        size (tuple): the size of the animation in pixels.</span>
+<span class="sd">        action (constants.Action): --</span>
+<span class="sd">        direction (constnts.Direction): --</span>
+<span class="sd">        topleft_float (x,y tuple): --</span>
+<span class="sd">        position_rect</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directory</span><span class="p">,</span> <span class="n">position</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            directory (str): directory containing (animated)</span>
+<span class="sd">            walkabout GIFs. Assumed parent is data/walkabouts/</span>
+<span class="sd">            position (tuple): (x, y) coordinates (integers)</span>
+<span class="sd">                referring to absolute pixel coordinate.</span>
+<span class="sd">            children (list|None): Walkabout objects drawn relative to</span>
+<span class="sd">                this Walkabout instance.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; hat = Walkabout(&#39;hat&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; Walkabout(&#39;debug&#39;, position=(44, 55), children=[hat])</span>
+<span class="sd">            &lt;hypatia.animations.Walkabout object at 0x...&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># the attributes we&#39;re generating</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animations</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">animation_anchors</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">directions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="bp">None</span>  <span class="c"># will be removed in future?</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">position</span><span class="p">:</span>
+            <span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">topleft_float</span> <span class="o">=</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">position</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="nb">float</span><span class="p">(</span><span class="n">position</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+
+        <span class="c"># specify the files to load</span>
+        <span class="c"># how will i glob a resource</span>
+        <span class="n">resource</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Resource</span><span class="p">(</span><span class="s">&#39;walkabouts&#39;</span><span class="p">,</span> <span class="n">directory</span><span class="p">)</span>
+        <span class="n">sprite_files</span> <span class="o">=</span> <span class="n">resource</span><span class="o">.</span><span class="n">get_type</span><span class="p">(</span><span class="s">&#39;.gif&#39;</span><span class="p">)</span>
+
+        <span class="c"># no sprites matching pattern!</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">sprite_files</span><span class="p">:</span>
+
+            <span class="k">raise</span> <span class="n">BadWalkabout</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">sprite_path</span> <span class="ow">in</span> <span class="n">sprite_files</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">file_name</span><span class="p">,</span> <span class="n">file_ext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">sprite_path</span><span class="p">)</span>
+            <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">file_name</span> <span class="o">==</span> <span class="s">&#39;only&#39;</span><span class="p">:</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Stand</span>
+                <span class="n">direction</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">action</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">direction</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="p">,</span> <span class="n">direction</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="p">,</span> <span class="n">action</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+
+            <span class="c"># load pyganim from gif file</span>
+            <span class="n">animation</span> <span class="o">=</span> <span class="n">sprite_files</span><span class="p">[</span><span class="n">sprite_path</span><span class="p">]</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">animations</span><span class="p">[</span><span class="n">action</span><span class="p">][</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="n">animation</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">animations</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">direction</span><span class="p">:</span> <span class="n">animation</span><span class="p">}</span>
+
+            <span class="c"># load anchor points</span>
+            <span class="k">if</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span> <span class="ow">in</span> <span class="n">sprite_files</span><span class="p">:</span>
+                <span class="n">anchors_ini</span> <span class="o">=</span> <span class="n">resource</span><span class="p">[</span><span class="n">file_name</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">]</span>
+                <span class="n">anim_anchors</span> <span class="o">=</span> <span class="n">AnimAnchors</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">file_name</span> <span class="o">+</span> <span class="n">ini</span><span class="p">)</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">animation_anchors</span><span class="p">[</span><span class="n">action</span><span class="p">][</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="n">anim_anchors</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">animation_anchors</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">direction</span><span class="p">:</span> <span class="n">anim_anchors</span><span class="p">}</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">animation_anchors</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c"># ... set the rest of the attribs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resource</span> <span class="o">=</span> <span class="n">resource</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">getMaxSize</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topleft_float</span> <span class="o">=</span> <span class="n">topleft_float</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Stand</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">speed_in_pixels_per_second</span> <span class="o">=</span> <span class="mf">20.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child_walkabouts</span> <span class="o">=</span> <span class="n">children</span> <span class="ow">or</span> <span class="p">[]</span>
+
+<div class="viewcode-block" id="Walkabout.__getitem__"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.Walkabout.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetch sprites associated with action (key).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key (constants.Action): return dictionary of</span>
+<span class="sd">                sprites for this action (key).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: sprites associated with action supplied (key)</span>
+
+<span class="sd">        Examples:</span>
+<span class="sd">            &gt;&gt;&gt; walkabout = Walkabout(&#39;debug&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; walkabout[constants.Action.Walk][constants.Direction.Up]</span>
+<span class="sd">            &lt;pyganim.PygAnimation object at 0x...&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">animations</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Walkabout.current_animation"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.Walkabout.current_animation">[docs]</a>    <span class="k">def</span> <span class="nf">current_animation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the animation selected by the current action</span>
+<span class="sd">        and direction.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            PygAnim: the animation associated with this Walkabout&#39;s</span>
+<span class="sd">                current action and direction.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; walkabout = Walkabout(&#39;debug&#39;)</span>
+<span class="sd">            &gt;&gt;&gt; walkabout.current_animation()</span>
+<span class="sd">            &lt;pyganim.PygAnimation object at 0x...&gt;</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">animations</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">]</span>
+</div>
+<div class="viewcode-block" id="Walkabout.get_anchors"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.Walkabout.get_anchors">[docs]</a>    <span class="k">def</span> <span class="nf">get_anchors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get anchors per frame in a GIF by identifying th ecoordinate</span>
+<span class="sd">        of a specific color.</span>
+
+<span class="sd">        Warning:</span>
+<span class="sd">            This is an old, but still useful way of loading anchors for</span>
+<span class="sd">            an animation.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">anchors</span> <span class="o">=</span> <span class="p">{</span><span class="n">a</span><span class="p">:</span> <span class="p">{</span><span class="n">d</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">directions</span><span class="p">}</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">}</span>
+
+        <span class="k">for</span> <span class="n">action</span><span class="p">,</span> <span class="n">directions</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">animations</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">animation</span> <span class="ow">in</span> <span class="n">directions</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+                <span class="k">for</span> <span class="n">surface_frame</span> <span class="ow">in</span> <span class="n">animation</span><span class="o">.</span><span class="n">_images</span><span class="p">:</span>
+                    <span class="n">anchor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_anchor</span><span class="p">(</span><span class="n">surface_frame</span><span class="p">)</span>
+                    <span class="n">anchors</span><span class="p">[</span><span class="n">action</span><span class="p">][</span><span class="n">direction</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">anchor</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">anchors</span>
+</div>
+<div class="viewcode-block" id="Walkabout.get_anchor"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.Walkabout.get_anchor">[docs]</a>    <span class="k">def</span> <span class="nf">get_anchor</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">surface</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Locate the anchor coordinate by identifying which pixel</span>
+<span class="sd">        coordinate matches color.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            surface (pygame.Surface): surface to scan for color and</span>
+<span class="sd">                return the coord which color appears</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            (x, y): pixel coordinate where color shows up.</span>
+
+<span class="sd">        Warning:</span>
+<span class="sd">            Old way of defining anchor points, but still handy!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
+        <span class="n">debug_color</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Color</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span> <span class="mi">136</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">coord</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="p">)):</span>
+
+            <span class="k">if</span> <span class="n">surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">(</span><span class="n">coord</span><span class="p">)</span> <span class="o">==</span> <span class="n">debug_color</span><span class="p">:</span>
+
+                <span class="k">return</span> <span class="n">coord</span>
+</div>
+<div class="viewcode-block" id="Walkabout.blit"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.Walkabout.blit">[docs]</a>    <span class="k">def</span> <span class="nf">blit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="p">,</span> <span class="n">offset</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Draw the appropriate/active animation to screen.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Should go to render module?</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">          screen (pygame.Surface): the primary display/screen.</span>
+<span class="sd">          offset (x, y tuple): the x, y coords of the absolute</span>
+<span class="sd">              starting top left corner for the current screen/viewport</span>
+<span class="sd">              position.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">topleft_float</span>
+        <span class="n">x</span> <span class="o">-=</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">-=</span> <span class="n">offset</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">position_on_screen</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+
+        <span class="n">pyganim_gif</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_animation</span><span class="p">()</span>
+        <span class="n">pyganim_gif</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">position_on_screen</span><span class="p">)</span>
+
+        <span class="c"># the rest of this is for children/anchors</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">animation_anchors</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">None</span>
+
+        <span class="n">pyganim_frame_index</span> <span class="o">=</span> <span class="n">pyganim</span><span class="o">.</span><span class="n">findStartTime</span><span class="p">(</span><span class="n">pyganim_gif</span><span class="o">.</span><span class="n">_startTimes</span><span class="p">,</span>
+                                                    <span class="n">pyganim_gif</span><span class="o">.</span><span class="n">elapsed</span><span class="p">)</span>
+        <span class="n">current_frame_surface</span> <span class="o">=</span> <span class="n">pyganim_gif</span><span class="o">.</span><span class="n">getFrame</span><span class="p">(</span><span class="n">pyganim_frame_index</span><span class="p">)</span>
+
+        <span class="c"># anchors are all completely wrong</span>
+        <span class="n">animation_anchors</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">animation_anchors</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">]</span>
+        <span class="n">frame_anchor</span> <span class="o">=</span> <span class="n">animation_anchors</span><span class="o">.</span><span class="n">get_anchor_point</span><span class="p">(</span><span class="s">&#39;head_anchor&#39;</span><span class="p">,</span>
+                                                          <span class="n">pyganim_frame_index</span><span class="p">)</span>
+        <span class="n">parent_anchor</span> <span class="o">=</span> <span class="n">AnchorPoint</span><span class="p">(</span><span class="n">position_on_screen</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">frame_anchor</span><span class="o">.</span><span class="n">x</span><span class="p">,</span>
+                                    <span class="n">position_on_screen</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">frame_anchor</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">child_walkabout</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">child_walkabouts</span><span class="p">:</span>
+            <span class="c"># draw at position + difference in child anchor</span>
+            <span class="n">child_anim_anchor</span> <span class="o">=</span> <span class="p">(</span><span class="n">child_walkabout</span>
+                                 <span class="o">.</span><span class="n">animation_anchors</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">action</span><span class="p">]</span>
+                                 <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">])</span>
+            <span class="n">child_frame_anchor</span> <span class="o">=</span> <span class="p">(</span><span class="n">child_anim_anchor</span>
+                                  <span class="o">.</span><span class="n">get_anchor_point</span><span class="p">(</span><span class="s">&#39;head_anchor&#39;</span><span class="p">,</span>
+                                                    <span class="n">pyganim_frame_index</span><span class="p">))</span>
+            <span class="n">child_position</span> <span class="o">=</span> <span class="n">parent_anchor</span> <span class="o">-</span> <span class="n">child_frame_anchor</span>
+            <span class="n">child_anim</span> <span class="o">=</span> <span class="n">child_walkabout</span><span class="o">.</span><span class="n">current_animation</span><span class="p">()</span>
+            <span class="n">child_anim</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">screen</span><span class="p">,</span> <span class="n">child_position</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Walkabout.runtime_setup"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.Walkabout.runtime_setup">[docs]</a>    <span class="k">def</span> <span class="nf">runtime_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Perform actions to setup the walkabout. Actions performed</span>
+<span class="sd">        once pygame is running and walkabout has been initialized.</span>
+
+<span class="sd">        Convert and play all the animations, run init for children.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            It MAY be bad to leave the sprites in play mode in startup</span>
+<span class="sd">            by default.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">animations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">actions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Stand</span><span class="p">,)</span>
+            <span class="n">directions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span><span class="p">,)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">actions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Walk</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Stand</span><span class="p">)</span>
+            <span class="n">directions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Up</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span><span class="p">,</span>
+                          <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Left</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Right</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+
+            <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">directions</span><span class="p">:</span>
+                <span class="n">animated_sprite</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">animations</span><span class="p">[</span><span class="n">action</span><span class="p">][</span><span class="n">direction</span><span class="p">]</span>
+                <span class="n">animated_sprite</span><span class="o">.</span><span class="n">convert_alpha</span><span class="p">()</span>
+                <span class="n">animated_sprite</span><span class="o">.</span><span class="n">play</span><span class="p">()</span>
+
+        <span class="k">for</span> <span class="n">walkabout_child</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">child_walkabouts</span><span class="p">:</span>
+            <span class="n">walkabout_child</span><span class="o">.</span><span class="n">runtime_setup</span><span class="p">()</span>
+
+</div></div>
+<span class="k">def</span> <span class="nf">palette_cycle</span><span class="p">(</span><span class="n">surface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get_palette is not sufficient; it generates superflous colors.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">      Need to see if I can convert 32bit alpha to 8 bit temporarily,</span>
+<span class="sd">      to be converted back at end of palette/color manipulations.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">original_surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c"># don&#39;t touch! used for later calc</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
+    <span class="n">ordered_color_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">seen_colors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)):</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">(</span><span class="n">coordinate</span><span class="p">)</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">seen_colors</span><span class="p">:</span>
+
+            <span class="k">continue</span>
+
+        <span class="n">ordered_color_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">seen_colors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+
+    <span class="c"># reverse the color list but not the pixel arrays, then replace!</span>
+    <span class="n">old_color_list</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">(</span><span class="n">ordered_color_list</span><span class="p">)</span>
+    <span class="n">new_surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">rotation_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ordered_color_list</span><span class="p">)):</span>
+        <span class="n">new_surface</span> <span class="o">=</span> <span class="n">new_surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">new_color_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">old_color_list</span><span class="p">)</span>
+        <span class="n">new_color_list</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">color_translations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">old_color_list</span><span class="p">,</span> <span class="n">new_color_list</span><span class="p">))</span>
+
+        <span class="c"># replace each former color with the color from newcolor_list</span>
+        <span class="k">for</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)):</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">new_surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">(</span><span class="n">coordinate</span><span class="p">)</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+            <span class="n">new_color</span> <span class="o">=</span> <span class="n">color_translations</span><span class="p">[</span><span class="n">color</span><span class="p">]</span>
+            <span class="n">new_surface</span><span class="o">.</span><span class="n">set_at</span><span class="p">(</span><span class="n">coordinate</span><span class="p">,</span> <span class="n">new_color</span><span class="p">)</span>
+
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">new_surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">frame</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+        <span class="n">old_color_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">new_color_list</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pyganim</span><span class="o">.</span><span class="n">PygAnimation</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="palette_cycle"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.palette_cycle">[docs]</a><span class="k">def</span> <span class="nf">palette_cycle</span><span class="p">(</span><span class="n">surface</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;get_palette is not sufficient; it generates superflous colors.</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        Need to see if I can convert 32bit alpha to 8 bit temporarily,</span>
+<span class="sd">        to be converted back at end of palette/color manipulations.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">original_surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c"># don&#39;t touch! used for later calc</span>
+    <span class="n">width</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">get_size</span><span class="p">()</span>
+    <span class="n">ordered_color_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">seen_colors</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">for</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)):</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">(</span><span class="n">coordinate</span><span class="p">)</span>
+        <span class="n">color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">color</span> <span class="ow">in</span> <span class="n">seen_colors</span><span class="p">:</span>
+
+            <span class="k">continue</span>
+
+        <span class="n">ordered_color_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+        <span class="n">seen_colors</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+
+    <span class="c"># reverse the color list but not the pixel arrays, then replace!</span>
+    <span class="n">old_color_list</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">deque</span><span class="p">(</span><span class="n">ordered_color_list</span><span class="p">)</span>
+    <span class="n">new_surface</span> <span class="o">=</span> <span class="n">surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">rotation_i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ordered_color_list</span><span class="p">)):</span>
+        <span class="n">new_surface</span> <span class="o">=</span> <span class="n">new_surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">new_color_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">old_color_list</span><span class="p">)</span>
+        <span class="n">new_color_list</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">color_translations</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">old_color_list</span><span class="p">,</span> <span class="n">new_color_list</span><span class="p">))</span>
+
+        <span class="c"># replace each former color with the color from newcolor_list</span>
+        <span class="k">for</span> <span class="n">coordinate</span> <span class="ow">in</span> <span class="n">itertools</span><span class="o">.</span><span class="n">product</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">height</span><span class="p">)):</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">new_surface</span><span class="o">.</span><span class="n">get_at</span><span class="p">(</span><span class="n">coordinate</span><span class="p">)</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">color</span><span class="p">)</span>
+            <span class="n">new_color</span> <span class="o">=</span> <span class="n">color_translations</span><span class="p">[</span><span class="n">color</span><span class="p">]</span>
+            <span class="n">new_surface</span><span class="o">.</span><span class="n">set_at</span><span class="p">(</span><span class="n">coordinate</span><span class="p">,</span> <span class="n">new_color</span><span class="p">)</span>
+
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">new_surface</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">frame</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">))</span>
+        <span class="n">old_color_list</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">new_color_list</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pyganim</span><span class="o">.</span><span class="n">PygAnimation</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">hypatia  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

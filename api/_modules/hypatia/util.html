@@ -47,6 +47,9 @@
           <div class="body">
             
   <h1>Source code for hypatia.util</h1><div class="highlight"><pre>
+<span class="c"># This module is part of Hypatia and is released under the</span>
+<span class="c"># MIT license: http://opensource.org/licenses/MIT</span>
+
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
 <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
@@ -59,6 +62,10 @@
     <span class="kn">import</span> <span class="nn">configparser</span>
     <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
 
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">import</span> <span class="nn">pyganim</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+
 
 <div class="viewcode-block" id="Resource"><a class="viewcode-back" href="../../hypatia.html#hypatia.util.Resource">[docs]</a><span class="k">class</span> <span class="nc">Resource</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A zip archive in the resources directory, located by</span>
@@ -66,7 +73,7 @@
 
 <span class="sd">    Attributes:</span>
 <span class="sd">      files (dict): Key is file name, value can be one of StringIO,</span>
-<span class="sd">        BytesIO, or ConfigParser objects.</span>
+<span class="sd">        BytesIO, PygAnim, or ConfigParser objects.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -90,6 +97,13 @@
 
             <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
                 <span class="n">file_data</span> <span class="o">=</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+
+                <span class="c"># because namelist will also generate</span>
+                <span class="c"># the current directory</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">file_name</span><span class="p">:</span>
+
+                    <span class="k">continue</span>
 
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">file_data</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">file_data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
@@ -106,13 +120,118 @@
                 <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
                     <span class="n">file_data</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
 
+                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;.gif&#39;</span><span class="p">:</span>
+                        <span class="n">file_data</span> <span class="o">=</span> <span class="n">load_gif</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
+
                 <span class="n">files</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_data</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">files</span> <span class="o">=</span> <span class="n">files</span>
 
     <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_name</span><span class="p">):</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span>
+
+<div class="viewcode-block" id="Resource.get_type"><a class="viewcode-back" href="../../hypatia.html#hypatia.util.Resource.get_type">[docs]</a>    <span class="k">def</span> <span class="nf">get_type</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_extension</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a dictionary of files which have the file extension</span>
+<span class="sd">        specified. Remember to include the dot, e.g., &quot;.gif&quot;!</span>
+
+<span class="sd">        Arg:</span>
+<span class="sd">            file_extension (str): the file extension (including dot) of</span>
+<span class="sd">                the files to return.</span>
+
+<span class="sd">        Warning:</span>
+<span class="sd">            Remember to include the dot in the file extension, e.g., &quot;.gif&quot;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict|None: {file name: file content} of files which have the</span>
+<span class="sd">                file extension specified. If no files match,</span>
+<span class="sd">                None is returned.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">matching_files</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">for</span> <span class="n">file_name</span><span class="p">,</span> <span class="n">file_content</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+            <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">file_extension</span><span class="p">:</span>
+                <span class="n">matching_files</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_content</span>
+
+        <span class="k">return</span> <span class="n">matching_files</span> <span class="ow">or</span> <span class="bp">None</span>
+
+</div></div>
+<div class="viewcode-block" id="load_gif"><a class="viewcode-back" href="../../hypatia.html#hypatia.util.load_gif">[docs]</a><span class="k">def</span> <span class="nf">load_gif</span><span class="p">(</span><span class="n">path_or_bytesio</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Create a PygAnim object by reading a GIF from path or</span>
+<span class="sd">    a BytesIO object.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        path_or_bytesio (str|BytesIO): create animation using either</span>
+<span class="sd">            a string file path to a GIF, or provide a BytesIO of a GIF.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        PygAnim: the PygAnim animation which accurately depicts the GIF</span>
+<span class="sd">            referenced in gif_path.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; path = &#39;resources/walkabouts/debug.zip&#39;</span>
+<span class="sd">        &gt;&gt;&gt; file_name = &#39;debug/walk_up.gif&#39;</span>
+<span class="sd">        &gt;&gt;&gt; sample = zipfile.ZipFile(path).open(file_name).read()</span>
+<span class="sd">        &gt;&gt;&gt; load_gif(BytesIO(sample))</span>
+<span class="sd">        &lt;pyganim.PygAnimation object at 0x...&gt;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">pil_gif</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path_or_bytesio</span><span class="p">)</span>
+
+    <span class="n">frame_index</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">try</span><span class="p">:</span>
+
+        <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">duration</span> <span class="o">=</span> <span class="n">pil_gif</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s">&#39;duration&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span>
+            <span class="n">frame_as_pygame_image</span> <span class="o">=</span> <span class="n">pil_to_pygame</span><span class="p">(</span><span class="n">pil_gif</span><span class="p">,</span> <span class="s">&quot;RGBA&quot;</span><span class="p">)</span>
+            <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">frame_as_pygame_image</span><span class="p">,</span> <span class="n">duration</span><span class="p">))</span>
+            <span class="n">frame_index</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">pil_gif</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">pil_gif</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">EOFError</span><span class="p">:</span>
+
+        <span class="k">pass</span>  <span class="c"># end of sequence</span>
+
+    <span class="n">gif</span> <span class="o">=</span> <span class="n">pyganim</span><span class="o">.</span><span class="n">PygAnimation</span><span class="p">(</span><span class="n">frames</span><span class="p">)</span>
+    <span class="n">gif</span><span class="o">.</span><span class="n">anchor</span><span class="p">(</span><span class="n">pyganim</span><span class="o">.</span><span class="n">CENTER</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">gif</span>
+
+</div>
+<div class="viewcode-block" id="pil_to_pygame"><a class="viewcode-back" href="../../hypatia.html#hypatia.util.pil_to_pygame">[docs]</a><span class="k">def</span> <span class="nf">pil_to_pygame</span><span class="p">(</span><span class="n">pil_image</span><span class="p">,</span> <span class="n">encoding</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Convert PIL Image() to pygame Surface.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        pil_image (Image): image to convert to pygame.Surface().</span>
+<span class="sd">        encoding (str): image encoding, e.g., RGBA</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pygame.Surface: the converted image</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; from PIL import Image</span>
+<span class="sd">        &gt;&gt;&gt; path = &#39;resources/walkabouts/debug.zip&#39;</span>
+<span class="sd">        &gt;&gt;&gt; file_name = &#39;debug/walk_up.gif&#39;</span>
+<span class="sd">        &gt;&gt;&gt; sample = zipfile.ZipFile(path).open(file_name).read()</span>
+<span class="sd">        &gt;&gt;&gt; gif = Image.open(BytesIO(sample))</span>
+<span class="sd">        &gt;&gt;&gt; pil_to_pygame(gif, &quot;RGBA&quot;)</span>
+<span class="sd">        &lt;Surface(6x8x32 SW)&gt;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">image_as_string</span> <span class="o">=</span> <span class="n">pil_image</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s">&#39;RGBA&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">tostring</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">pygame</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span>
+                                   <span class="n">image_as_string</span><span class="p">,</span>
+                                   <span class="n">pil_image</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
+                                   <span class="s">&#39;RGBA&#39;</span>
+                                  <span class="p">)</span></div>
 </pre></div>
 
           </div>

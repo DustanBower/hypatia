@@ -51,8 +51,15 @@
 <span class="c"># MIT license: http://opensource.org/licenses/MIT</span>
 
 <span class="sd">&quot;&quot;&quot;Tools for animation. Animation sources are GIFs from disk, which</span>
-<span class="sd">have been made into a PygAnim [1]_ object. Stateful animations which</span>
-<span class="sd">represent objects, e.g., Walkabout represents an Actor.</span>
+<span class="sd">have been made into a PygAnimation [1]_ object. Stateful animations</span>
+<span class="sd">which represent objects, e.g., :class:`Walkabout` represents an</span>
+<span class="sd">:class:`actor.Actor`.</span>
+
+<span class="sd">Examples of &quot;tools&quot;:</span>
+
+<span class="sd">* functions for creating an animation from a single suface</span>
+<span class="sd">* loading animations from disk</span>
+<span class="sd">* adding frame-dependent positional data</span>
 
 <span class="sd">References:</span>
 <span class="sd">    .. [1] PygAnim:</span>
@@ -66,7 +73,9 @@
 <span class="sd">    from sprite sheets.</span>
 
 <span class="sd">See Also:</span>
-<span class="sd">    The render module. The Actor module.</span>
+
+<span class="sd">    * :mod:`render`</span>
+<span class="sd">    * :mod:`actor`</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -91,11 +100,11 @@
 
 
 <div class="viewcode-block" id="BadWalkabout"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.BadWalkabout">[docs]</a><span class="k">class</span> <span class="nc">BadWalkabout</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The supplied directory has no files which match *.gif. The</span>
+    <span class="sd">&quot;&quot;&quot;The supplied directory has no files which match ``*.gif.`` The</span>
 <span class="sd">    walkabout resource specified does not contain any GIFs.</span>
 
 <span class="sd">    See Also:</span>
-<span class="sd">        Walkabout.__init__()</span>
+<span class="sd">        :meth:`Walkabout.__init__`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -103,9 +112,9 @@
         <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            supplied_archive (str): Walkabout resource archive which</span>
-<span class="sd">                *should* have contained files of pattern *.gif,</span>
-<span class="sd">                but didn&#39;t.</span>
+<span class="sd">            supplied_archive (str): :class:`Walkabout` resource archive</span>
+<span class="sd">                which *should* have contained files of pattern</span>
+<span class="sd">                ``*.gif,`` but didn&#39;t.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -113,20 +122,20 @@
 
 </div>
 <div class="viewcode-block" id="AnimAnchors"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.AnimAnchors">[docs]</a><span class="k">class</span> <span class="nc">AnimAnchors</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The anchors per frame of a PygAnimation. Anchors are</span>
-<span class="sd">    coordinates belonging to a surface, which can be translated</span>
-<span class="sd">    to coordinates belonging to another surface.</span>
+    <span class="sd">&quot;&quot;&quot;The anchors per frame of a :class:`pyganim.PygAnimation`. Anchors</span>
+<span class="sd">    are coordinates belonging to a :class:`pygame.Surface`, which can be</span>
+<span class="sd">    translated to coordinates belonging to another surface.</span>
 
-<span class="sd">    With AnimAnchors you can keep one animation &quot;pinned&quot; or &quot;glued&quot;</span>
-<span class="sd">    to another. This can help with adding decals to a Walkabout</span>
-<span class="sd">    animation (like a hat!).</span>
+<span class="sd">    With :class:`AnimAnchors` you can keep one animation &quot;pinned&quot; or</span>
+<span class="sd">    &quot;glued&quot; to another. This can help with adding decals to a</span>
+<span class="sd">    :class;`Walkabout` animation (like a hat!).</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        anchor_points (dict): key is anchor label/group, value is a list</span>
-<span class="sd">            of AnchorPoint()s whose index corresponds to respective</span>
-<span class="sd">            PygAnim frame index.</span>
+<span class="sd">            of :class:`AnchorPoint` instances whose index corresponds to</span>
+<span class="sd">            respective :class:`pyganim.PygAnimation` frame index.</span>
 <span class="sd">        anchor_groups (list): the names/labels of the anchor groups,</span>
-<span class="sd">            e.g., &quot;head_anchor.&quot;</span>
+<span class="sd">            e.g., *head_anchor*.</span>
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; resource = util.Resource(&#39;walkabouts&#39;, &#39;debug&#39;)</span>
@@ -142,7 +151,9 @@
 <span class="sd">        tall cacti from Mario? How about a spinning mace?</span>
 
 <span class="sd">    See Also:</span>
-<span class="sd">        AnchorPoint(), Walkabout.blit()</span>
+
+<span class="sd">        * :class:`AnchorPoint`</span>
+<span class="sd">        * :meth:`Walkabout.blit`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -161,16 +172,19 @@
 <span class="sd">            1=1,3</span>
 <span class="sd">            2=2,2</span>
 
-<span class="sd">        [head_anchor] is the anchor label. The stuff below it is</span>
-<span class="sd">        head_anchor&#39;s position for frames 0, 1, and 2.</span>
+<span class="sd">        `[head_anchor]` is the anchor label. The stuff below it is</span>
+<span class="sd">        `head_anchor`&#39;s position for frames 0, 1, and 2.</span>
 
-<span class="sd">        In the above example, head_anchor has a coordinate (anchor)</span>
-<span class="sd">        for three different frames: frame 0 at (0, 2), frame 1 at</span>
-<span class="sd">        (1, 3), and frame 2 at (2, 2).</span>
+<span class="sd">        In the above example, `head_anchor` has a coordinate (anchor)</span>
+<span class="sd">        for three different frames:</span>
+
+<span class="sd">        * frame 0 at (0, 2)</span>
+<span class="sd">        * frame 1 at (1, 3)</span>
+<span class="sd">        * frame 2 at (2, 2)</span>
 
 <span class="sd">        Note:</span>
-<span class="sd">            anchor_ini should be provided from a Resource(). See</span>
-<span class="sd">            example below.</span>
+<span class="sd">            `anchor_ini` should be provided from a</span>
+<span class="sd">            :class:`util.Resource`. See example below.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            anchor_ini (configparser): configparser object.</span>
@@ -200,8 +214,8 @@
         <span class="k">return</span> <span class="n">AnimAnchors</span><span class="p">(</span><span class="n">anchors</span><span class="p">,</span> <span class="n">anchor_point_groups</span><span class="p">)</span>
 </div>
 <div class="viewcode-block" id="AnimAnchors.get_anchor_point"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.AnimAnchors.get_anchor_point">[docs]</a>    <span class="k">def</span> <span class="nf">get_anchor_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anchor_point_group</span><span class="p">,</span> <span class="n">frame_index</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return an AnchorPoint corresponding to group name and frame</span>
-<span class="sd">        index.</span>
+        <span class="sd">&quot;&quot;&quot;Return an :class:`AnchorPoint` corresponding to group name</span>
+<span class="sd">        and frame index.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            anchor_point_group (str): name of the anchor point group</span>
@@ -292,7 +306,7 @@
 <span class="sd">                AnchorPoint&#39;s coordinates.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            (x, y) tuple: the x, y difference between this</span>
+<span class="sd">            tuple: the (x, y) difference between this</span>
 <span class="sd">                anchor point and the other supplied.</span>
 
 <span class="sd">        Example:</span>
@@ -310,15 +324,11 @@
 <div class="viewcode-block" id="Walkabout"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.Walkabout">[docs]</a><span class="k">class</span> <span class="nc">Walkabout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Sprite animations for a character which walks around.</span>
 
-<span class="sd">    Notes:</span>
-<span class="sd">        The walkabout sprites specified to be therein</span>
-<span class="sd">        walkabout_directory, are files with an action__direction.gif</span>
-<span class="sd">        filename convention.</span>
+<span class="sd">    The walkabout sprites specified to be therein</span>
+<span class="sd">    walkabout_directory, are files with an action__direction.gif</span>
+<span class="sd">    filename convention.</span>
 
-<span class="sd">        ASSUMPTION: walkabout_directory contains sprites for</span>
-<span class="sd">        walk AND run actions.</span>
-
-<span class="sd">        Blits its children relative to its own anchor.</span>
+<span class="sd">    Blits its children relative to its own anchor.</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        resource (Resource): --</span>
@@ -489,7 +499,7 @@
 <span class="sd">                return the coord which color appears</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            (x, y): pixel coordinate where color shows up.</span>
+<span class="sd">            tuple: (x, y) pixel coordinate where color shows up.</span>
 
 <span class="sd">        Warning:</span>
 <span class="sd">            Old way of defining anchor points, but still handy!</span>

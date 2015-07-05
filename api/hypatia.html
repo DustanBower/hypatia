@@ -95,8 +95,15 @@ Trying to delete this property raises a TypeError.</p>
 <div class="section" id="module-hypatia.animations">
 <span id="hypatia-animations-module"></span><h2>hypatia.animations module<a class="headerlink" href="#module-hypatia.animations" title="Permalink to this headline">¶</a></h2>
 <p>Tools for animation. Animation sources are GIFs from disk, which
-have been made into a PygAnim <a class="footnote-reference" href="#id2" id="id1">[1]</a> object. Stateful animations which
-represent objects, e.g., Walkabout represents an Actor.</p>
+have been made into a PygAnimation <a class="footnote-reference" href="#id2" id="id1">[1]</a> object. Stateful animations
+which represent objects, e.g., <a class="reference internal" href="#hypatia.animations.Walkabout" title="hypatia.animations.Walkabout"><tt class="xref py py-class docutils literal"><span class="pre">Walkabout</span></tt></a> represents an
+<tt class="xref py py-class docutils literal"><span class="pre">actor.Actor</span></tt>.</p>
+<p>Examples of &#8220;tools&#8221;:</p>
+<ul class="simple">
+<li>functions for creating an animation from a single suface</li>
+<li>loading animations from disk</li>
+<li>adding frame-dependent positional data</li>
+</ul>
 <p class="rubric">References</p>
 <table class="docutils footnote" frame="void" id="id2" rules="none">
 <colgroup><col class="label" /><col /></colgroup>
@@ -116,7 +123,10 @@ from sprite sheets.</p>
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last">The render module. The Actor module.</p>
+<ul class="last simple">
+<li><tt class="xref py py-mod docutils literal"><span class="pre">render</span></tt></li>
+<li><tt class="xref py py-mod docutils literal"><span class="pre">actor</span></tt></li>
+</ul>
 </div>
 <dl class="class">
 <dt id="hypatia.animations.AnchorPoint">
@@ -175,10 +185,10 @@ coordinates to add to this AnchorPoint&#8217;s coordinates.</td>
 coordinates to subtract from this
 AnchorPoint&#8217;s coordinates.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the x, y difference between this
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the (x, y) difference between this
 anchor point and the other supplied.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(x, y) tuple</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
 </tbody>
 </table>
@@ -197,25 +207,25 @@ anchor point and the other supplied.</td>
 <dt id="hypatia.animations.AnimAnchors">
 <em class="property">class </em><tt class="descclassname">hypatia.animations.</tt><tt class="descname">AnimAnchors</tt><big>(</big><em>anchor_points</em>, <em>anchor_groups</em><big>)</big><a class="reference internal" href="_modules/hypatia/animations.html#AnimAnchors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.animations.AnimAnchors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
-<p>The anchors per frame of a PygAnimation. Anchors are
-coordinates belonging to a surface, which can be translated
-to coordinates belonging to another surface.</p>
-<p>With AnimAnchors you can keep one animation &#8220;pinned&#8221; or &#8220;glued&#8221;
-to another. This can help with adding decals to a Walkabout
-animation (like a hat!).</p>
+<p>The anchors per frame of a <tt class="xref py py-class docutils literal"><span class="pre">pyganim.PygAnimation</span></tt>. Anchors
+are coordinates belonging to a <tt class="xref py py-class docutils literal"><span class="pre">pygame.Surface</span></tt>, which can be
+translated to coordinates belonging to another surface.</p>
+<p>With <a class="reference internal" href="#hypatia.animations.AnimAnchors" title="hypatia.animations.AnimAnchors"><tt class="xref py py-class docutils literal"><span class="pre">AnimAnchors</span></tt></a> you can keep one animation &#8220;pinned&#8221; or
+&#8220;glued&#8221; to another. This can help with adding decals to a
+:class;`Walkabout` animation (like a hat!).</p>
 <dl class="attribute">
 <dt id="hypatia.animations.AnimAnchors.anchor_points">
 <tt class="descname">anchor_points</tt><a class="headerlink" href="#hypatia.animations.AnimAnchors.anchor_points" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>dict</em> &#8211; key is anchor label/group, value is a list
-of AnchorPoint()s whose index corresponds to respective
-PygAnim frame index.</p>
+of <a class="reference internal" href="#hypatia.animations.AnchorPoint" title="hypatia.animations.AnchorPoint"><tt class="xref py py-class docutils literal"><span class="pre">AnchorPoint</span></tt></a> instances whose index corresponds to
+respective <tt class="xref py py-class docutils literal"><span class="pre">pyganim.PygAnimation</span></tt> frame index.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="hypatia.animations.AnimAnchors.anchor_groups">
 <tt class="descname">anchor_groups</tt><a class="headerlink" href="#hypatia.animations.AnimAnchors.anchor_groups" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>list</em> &#8211; the names/labels of the anchor groups,
-e.g., &#8220;head_anchor.&#8221;</p>
+e.g., <em>head_anchor</em>.</p>
 </dd></dl>
 
 <p class="rubric">Example</p>
@@ -235,7 +245,10 @@ tall cacti from Mario? How about a spinning mace?</p>
 </div>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last">AnchorPoint(), Walkabout.blit()</p>
+<ul class="last simple">
+<li><a class="reference internal" href="#hypatia.animations.AnchorPoint" title="hypatia.animations.AnchorPoint"><tt class="xref py py-class docutils literal"><span class="pre">AnchorPoint</span></tt></a></li>
+<li><a class="reference internal" href="#hypatia.animations.Walkabout.blit" title="hypatia.animations.Walkabout.blit"><tt class="xref py py-meth docutils literal"><span class="pre">Walkabout.blit()</span></tt></a></li>
+</ul>
 </div>
 <dl class="classmethod">
 <dt id="hypatia.animations.AnimAnchors.from_config">
@@ -247,15 +260,19 @@ tall cacti from Mario? How about a spinning mace?</p>
 0=0,2
 1=1,3
 2=2,2</div></blockquote>
-<p>[head_anchor] is the anchor label. The stuff below it is
-head_anchor&#8217;s position for frames 0, 1, and 2.</p>
-<p>In the above example, head_anchor has a coordinate (anchor)
-for three different frames: frame 0 at (0, 2), frame 1 at
-(1, 3), and frame 2 at (2, 2).</p>
+<p><cite>[head_anchor]</cite> is the anchor label. The stuff below it is
+<cite>head_anchor</cite>&#8216;s position for frames 0, 1, and 2.</p>
+<p>In the above example, <cite>head_anchor</cite> has a coordinate (anchor)
+for three different frames:</p>
+<ul class="simple">
+<li>frame 0 at (0, 2)</li>
+<li>frame 1 at (1, 3)</li>
+<li>frame 2 at (2, 2)</li>
+</ul>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">anchor_ini should be provided from a Resource(). See
-example below.</p>
+<p class="last"><cite>anchor_ini</cite> should be provided from a
+<tt class="xref py py-class docutils literal"><span class="pre">util.Resource</span></tt>. See example below.</p>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -286,8 +303,8 @@ example below.</p>
 <dl class="method">
 <dt id="hypatia.animations.AnimAnchors.get_anchor_point">
 <tt class="descname">get_anchor_point</tt><big>(</big><em>anchor_point_group</em>, <em>frame_index</em><big>)</big><a class="reference internal" href="_modules/hypatia/animations.html#AnimAnchors.get_anchor_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.animations.AnimAnchors.get_anchor_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return an AnchorPoint corresponding to group name and frame
-index.</p>
+<dd><p>Return an <a class="reference internal" href="#hypatia.animations.AnchorPoint" title="hypatia.animations.AnchorPoint"><tt class="xref py py-class docutils literal"><span class="pre">AnchorPoint</span></tt></a> corresponding to group name
+and frame index.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -328,11 +345,11 @@ isn&#8217;t defined for frame.</p>
 <dt id="hypatia.animations.BadWalkabout">
 <em class="property">exception </em><tt class="descclassname">hypatia.animations.</tt><tt class="descname">BadWalkabout</tt><big>(</big><em>supplied_archive</em><big>)</big><a class="reference internal" href="_modules/hypatia/animations.html#BadWalkabout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.animations.BadWalkabout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></tt></p>
-<p>The supplied directory has no files which match <a href="#id3"><span class="problematic" id="id4">*</span></a>.gif. The
+<p>The supplied directory has no files which match <tt class="docutils literal"><span class="pre">*.gif.</span></tt> The
 walkabout resource specified does not contain any GIFs.</p>
 <div class="admonition seealso">
 <p class="first admonition-title">See also</p>
-<p class="last">Walkabout.__init__()</p>
+<p class="last"><tt class="xref py py-meth docutils literal"><span class="pre">Walkabout.__init__()</span></tt></p>
 </div>
 </dd></dl>
 
@@ -341,12 +358,9 @@ walkabout resource specified does not contain any GIFs.</p>
 <em class="property">class </em><tt class="descclassname">hypatia.animations.</tt><tt class="descname">Walkabout</tt><big>(</big><em>directory</em>, <em>position=None</em>, <em>children=None</em><big>)</big><a class="reference internal" href="_modules/hypatia/animations.html#Walkabout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.animations.Walkabout" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Sprite animations for a character which walks around.</p>
-<p class="rubric">Notes</p>
 <p>The walkabout sprites specified to be therein
 walkabout_directory, are files with an action__direction.gif
 filename convention.</p>
-<p>ASSUMPTION: walkabout_directory contains sprites for
-walk AND run actions.</p>
 <p>Blits its children relative to its own anchor.</p>
 <dl class="attribute">
 <dt id="hypatia.animations.Walkabout.resource">
@@ -488,9 +502,9 @@ coordinate matches color.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>surface</strong> (<em>pygame.Surface</em>) &#8211; surface to scan for color and
 return the coord which color appears</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">pixel coordinate where color shows up.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">(x, y) pixel coordinate where color shows up.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">(x, y)</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">tuple</td>
 </tr>
 </tbody>
 </table>

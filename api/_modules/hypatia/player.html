@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.player &mdash; hypatia 0.2.14 documentation</title>
+    <title>hypatia.player &mdash; hypatia 0.2.16 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.14',
+        VERSION:     '0.2.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.14 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.16 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -59,12 +59,12 @@
 <span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">actor</span>
 
 
-<div class="viewcode-block" id="Player"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.Player">[docs]</a><span class="k">class</span> <span class="nc">Player</span><span class="p">(</span><span class="n">actor</span><span class="o">.</span><span class="n">Actor</span><span class="p">):</span>
+<div class="viewcode-block" id="HumanPlayer"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.HumanPlayer">[docs]</a><span class="k">class</span> <span class="nc">HumanPlayer</span><span class="p">(</span><span class="n">actor</span><span class="o">.</span><span class="n">Actor</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walkabout</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Player</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">walkabout</span><span class="p">)</span>
+        <span class="n">actor</span><span class="o">.</span><span class="n">Actor</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walkabout</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Player.talk"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.Player.talk">[docs]</a>    <span class="k">def</span> <span class="nf">talk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npcs</span><span class="p">,</span> <span class="n">dialogbox</span><span class="p">):</span>
+<div class="viewcode-block" id="HumanPlayer.talk"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.HumanPlayer.talk">[docs]</a>    <span class="k">def</span> <span class="nf">talk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npcs</span><span class="p">,</span> <span class="n">dialogbox</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Attempt to talk in current direction.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -73,13 +73,13 @@
         <span class="c"># to talk to npc if collide</span>
         <span class="n">facing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span>
 
-        <span class="k">if</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Up</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">:</span>
             <span class="n">disposition</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Right</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">:</span>
             <span class="n">disposition</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">:</span>
             <span class="n">disposition</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Left</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">:</span>
             <span class="n">disposition</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 
         <span class="n">talk_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -91,24 +91,10 @@
                 <span class="n">npc</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="n">facing</span><span class="p">,</span> <span class="n">dialogbox</span><span class="p">)</span>
 
 </div></div>
-<div class="viewcode-block" id="Npc"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.Npc">[docs]</a><span class="k">class</span> <span class="nc">Npc</span><span class="p">(</span><span class="n">Player</span><span class="p">):</span>
+<div class="viewcode-block" id="Npc"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.Npc">[docs]</a><span class="k">class</span> <span class="nc">Npc</span><span class="p">(</span><span class="n">actor</span><span class="o">.</span><span class="n">Actor</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">say_text</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s">&#39;say_text&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
-
-        <span class="nb">super</span><span class="p">(</span><span class="n">Npc</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-
-<div class="viewcode-block" id="Npc.say"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.Npc.say">[docs]</a>    <span class="k">def</span> <span class="nf">say</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at_direction</span><span class="p">,</span> <span class="n">dialogbox</span><span class="p">):</span>
-        <span class="n">facing</span> <span class="o">=</span> <span class="p">{</span>
-                  <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Up</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span><span class="p">,</span>
-                  <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Right</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Left</span><span class="p">,</span>
-                  <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Left</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Right</span><span class="p">,</span>
-                  <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Up</span>
-                 <span class="p">}[</span><span class="n">at_direction</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">facing</span>
-
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">say_text</span><span class="p">:</span>
-            <span class="n">dialogbox</span><span class="o">.</span><span class="n">set_message</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">say_text</span><span class="p">)</span></div></div>
+        <span class="n">actor</span><span class="o">.</span><span class="n">Actor</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 </pre></div>
 
           </div>
@@ -145,7 +131,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

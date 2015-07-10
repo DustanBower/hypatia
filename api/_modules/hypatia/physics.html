@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.physics &mdash; hypatia 0.2.14 documentation</title>
+    <title>hypatia.physics &mdash; hypatia 0.2.16 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.14',
+        VERSION:     '0.2.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.14 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.16 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -54,29 +54,55 @@
 
 <span class="kn">import</span> <span class="nn">pygame</span>
 
+<span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">constants</span>
+
 
 <div class="viewcode-block" id="Velocity"><a class="viewcode-back" href="../../hypatia.html#hypatia.physics.Velocity">[docs]</a><span class="k">class</span> <span class="nc">Velocity</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Eight-directional velocity.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span>
-                 <span class="n">up</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">up_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">up_left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                 <span class="n">left</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                 <span class="n">down</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">down_right</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">down_left</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Speed in pixels per second per axis. Values may be negative.</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">speed</span> <span class="o">=</span> <span class="n">speed</span>
+<span class="sd">        Args:</span>
+<span class="sd">          x (int|None): --</span>
+<span class="sd">          y (int|None): --</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">up</span> <span class="o">=</span> <span class="n">up</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">up_right</span> <span class="o">=</span> <span class="n">up_right</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">up_left</span> <span class="o">=</span> <span class="n">up_left</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">left</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">down</span> <span class="o">=</span> <span class="n">down</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">down_right</span> <span class="o">=</span> <span class="n">down_right</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">down_left</span> <span class="o">=</span> <span class="n">down_left</span>
+<div class="viewcode-block" id="Velocity.get_direction"><a class="viewcode-back" href="../../hypatia.html#hypatia.physics.Velocity.get_direction">[docs]</a>    <span class="k">def</span> <span class="nf">get_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a direction which corresponds to the current 2D</span>
+<span class="sd">        velocity.</span>
 
-</div>
+<span class="sd">        See Also:</span>
+<span class="sd">            :class:`constants.Direction`</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :class:`constants.Direction`: --</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">directions</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">x</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">y</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">y</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">pass</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">directions</span><span class="p">)</span>
+
+</div></div>
 <div class="viewcode-block" id="Position"><a class="viewcode-back" href="../../hypatia.html#hypatia.physics.Position">[docs]</a><span class="k">class</span> <span class="nc">Position</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The absolute position of an object.&quot;&quot;&quot;</span>
 
@@ -136,7 +162,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

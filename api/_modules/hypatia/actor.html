@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.actor &mdash; hypatia 0.2.14 documentation</title>
+    <title>hypatia.actor &mdash; hypatia 0.2.16 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.14',
+        VERSION:     '0.2.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.14 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.16 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -74,6 +74,7 @@
 
 <span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">animations</span>
 <span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">constants</span>
+<span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">physics</span>
 
 
 <div class="viewcode-block" id="Actor"><a class="viewcode-back" href="../../hypatia.html#hypatia.actor.Actor">[docs]</a><span class="k">class</span> <span class="nc">Actor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -89,55 +90,67 @@
 <span class="sd">    objects but the implementation does not prevent this.</span>
 
 <span class="sd">    Attributes:</span>
-
-<span class="sd">        walkabout: An instance of :class:`animations.Walkabout`.</span>
+<span class="sd">        walkabout (:class:`animations.Walkabout`): instance.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walkabout</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walkabout</span><span class="p">,</span> <span class="n">say_text</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Constructs a new Actor.</span>
 
-<span class="sd">        Arguments:</span>
-
-<span class="sd">            walkabout: An instance of :class:`animations.Walkabout`,</span>
-<span class="sd">                which is then accessible via the ``walkabout`` property.</span>
-<span class="sd">                This argument is optional and defaults to new instance</span>
+<span class="sd">        Args:</span>
+<span class="sd">            walkabout (:class:`animations.Walkabout`): Walkabout which</span>
+<span class="sd">                is then accessible via the ``walkabout`` property. This</span>
+<span class="sd">                argument is optional and defaults to new instance</span>
 <span class="sd">                of :class:`animations.Walkabout`.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span> <span class="o">=</span> <span class="n">walkabout</span> <span class="ow">or</span> <span class="n">animations</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">say_text</span> <span class="o">=</span> <span class="n">say_text</span> <span class="ow">or</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">physics</span><span class="o">.</span><span class="n">Velocity</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
 
-        <span class="nd">@property</span>
-        <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot;An intsance of :class:`constants.Direction`</span>
+<div class="viewcode-block" id="Actor.say"><a class="viewcode-back" href="../../hypatia.html#hypatia.actor.Actor.say">[docs]</a>    <span class="k">def</span> <span class="nf">say</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at_direction</span><span class="p">,</span> <span class="n">dialogbox</span><span class="p">):</span>
+        <span class="n">facing</span> <span class="o">=</span> <span class="p">{</span>
+                  <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">,</span>
+                  <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">,</span>
+                  <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">,</span>
+                  <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span>
+                 <span class="p">}[</span><span class="n">at_direction</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">facing</span>
 
-<span class="sd">            This property indicates the direction the actor is facing.</span>
-<span class="sd">            Is it possible to set this property to a new value.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">say_text</span><span class="p">:</span>
+            <span class="n">dialogbox</span><span class="o">.</span><span class="n">set_message</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">say_text</span><span class="p">)</span>
+</div>
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An intsance of :class:`constants.Direction`</span>
 
-<span class="sd">            Raises:</span>
-<span class="sd">                AttributeError: If the new value is not a valid object</span>
-<span class="sd">                    of the :class:`constants.Direction` class.</span>
+<span class="sd">        This property indicates the direction the actor is facing.</span>
+<span class="sd">        Is it possible to set this property to a new value.</span>
 
-<span class="sd">                TypeError: If one tries to delete this property</span>
+<span class="sd">        Raises:</span>
+<span class="sd">            AttributeError: If the new value is not a valid object</span>
+<span class="sd">                of the :class:`constants.Direction` class.</span>
+<span class="sd">            TypeError: If one tries to delete this property</span>
 
-<span class="sd">            &quot;&quot;&quot;</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span>
 
-        <span class="nd">@direction.setter</span>
-        <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_direction</span><span class="p">):</span>
+    <span class="nd">@direction.setter</span>
+    <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_direction</span><span class="p">):</span>
 
-            <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_direction</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_direction</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="p">):</span>
 
-                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">((</span><span class="s">&quot;Direction must be a valid &quot;</span>
-                                      <span class="s">&quot;constants.Direction value&quot;</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">((</span><span class="s">&quot;Direction must be a valid &quot;</span>
+                                  <span class="s">&quot;constants.Direction value&quot;</span><span class="p">))</span>
 
-            <span class="k">else</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">new_direction</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">new_direction</span>
 
-        <span class="nd">@direction.deleter</span>
-        <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="nd">@direction.deleter</span>
+<div class="viewcode-block" id="Actor.direction"><a class="viewcode-back" href="../../hypatia.html#hypatia.actor.Actor.direction">[docs]</a>    <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;Cannot delete the &#39;direction&#39; of an Actor&quot;</span><span class="p">)</span></div>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;Cannot delete the &#39;direction&#39; of an Actor&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
           </div>
@@ -174,7 +187,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

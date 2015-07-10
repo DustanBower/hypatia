@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.constants &mdash; hypatia 0.2.14 documentation</title>
+    <title>hypatia.constants &mdash; hypatia 0.2.16 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.14',
+        VERSION:     '0.2.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.14 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.16 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -60,32 +60,75 @@
 <span class="sd">Examples:</span>
 <span class="sd">  &gt;&gt;&gt; from hypatia import animations</span>
 <span class="sd">  &gt;&gt;&gt; sprite = animations.Walkabout(&#39;debug&#39;)</span>
-<span class="sd">  &gt;&gt;&gt; sprite.animations[Action.Walk][Direction.Right]</span>
+<span class="sd">  &gt;&gt;&gt; sprite.animations[Action.walk][Direction.east]</span>
 <span class="sd">  &lt;pyganim.PygAnimation object at 0x...&gt;</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">import</span> <span class="nn">enum</span>
 
 
-<div class="viewcode-block" id="Direction"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction">[docs]</a><span class="k">class</span> <span class="nc">Direction</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="c"># intentionally not using intenum</span>
+<div class="viewcode-block" id="Direction"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction">[docs]</a><span class="k">class</span> <span class="nc">Direction</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Compass direction. Specific to movement of a sprite/surfac.</span>
+
+<span class="sd">    Inspired by Unix numerical permissions. Only ever combined with</span>
+<span class="sd">    one other direction max.</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        :class:`physics.Velocity`</span>
+
+<span class="sd">    Note:</span>
+<span class="sd">        I don&#39;t  see a point in having a separate class for ordinal</span>
+<span class="sd">        and cardinal classes.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c"># Cardinal directions</span>
+    <span class="n">north</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">east</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">south</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">west</span> <span class="o">=</span> <span class="mi">6</span>
+
+    <span class="c"># Ordinal directions</span>
+    <span class="n">north_east</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="n">noth_west</span> <span class="o">=</span> <span class="mi">7</span>
+    <span class="n">south_east</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">south_west</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="c"># just for fun</span>
+    <span class="n">north_south</span> <span class="o">=</span> <span class="mi">5</span>
+    <span class="n">east_west</span> <span class="o">=</span> <span class="mi">8</span>
+
+<div class="viewcode-block" id="Direction.__add__"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">other_direction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Combine one cardinal direction with another to get</span>
+<span class="sd">        an ordinal direction.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            other_direction (:class:`Direction`): --</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :class:`Direction`: an ordinal direction.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># does this work</span>
+        <span class="k">return</span> <span class="n">Direction</span><span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">value</span> <span class="o">+</span> <span class="n">other_direction</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="Action"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Action">[docs]</a><span class="k">class</span> <span class="nc">Action</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Specific to movement of a sprite/surface.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="n">Up</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">Down</span> <span class="o">=</span> <span class="mi">2</span>
-    <span class="n">Left</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="n">Right</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="n">walk</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">stand</span> <span class="o">=</span> <span class="mi">2</span>
 
-</div>
-<div class="viewcode-block" id="Action"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Action">[docs]</a><span class="k">class</span> <span class="nc">Action</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Specific to movement of a sprite/surface.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-
-    <span class="n">Walk</span> <span class="o">=</span> <span class="mi">1</span>
-    <span class="n">Stand</span> <span class="o">=</span> <span class="mi">2</span></div>
+<span class="c"># let&#39;s run doctests first</span></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">doctest</span>
+    <span class="n">doctest</span><span class="o">.</span><span class="n">testmod</span><span class="p">()</span>
 </pre></div>
 
           </div>
@@ -122,7 +165,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

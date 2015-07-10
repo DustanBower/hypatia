@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.animations &mdash; hypatia 0.2.14 documentation</title>
+    <title>hypatia.animations &mdash; hypatia 0.2.16 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.14',
+        VERSION:     '0.2.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.14 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.16 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -140,7 +140,7 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; resource = util.Resource(&#39;walkabouts&#39;, &#39;debug&#39;)</span>
-<span class="sd">        &gt;&gt;&gt; anchors = AnimAnchors.from_config(resource[&#39;walk_up.ini&#39;])</span>
+<span class="sd">        &gt;&gt;&gt; anchors = AnimAnchors.from_config(resource[&#39;walk_north.ini&#39;])</span>
 <span class="sd">        &gt;&gt;&gt; anchors.anchor_points[&#39;head_anchor&#39;]</span>
 <span class="sd">        [&lt;hypatia.animations.AnchorPoint object at 0x...&gt;, ...]</span>
 <span class="sd">        &gt;&gt;&gt; anchors.anchor_groups</span>
@@ -192,7 +192,7 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">            &gt;&gt;&gt; resource = util.Resource(&#39;walkabouts&#39;, &#39;debug&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; AnimAnchors.from_config(resource[&#39;walk_up.ini&#39;])</span>
+<span class="sd">            &gt;&gt;&gt; AnimAnchors.from_config(resource[&#39;walk_north.ini&#39;])</span>
 <span class="sd">            &lt;hypatia.animations.AnimAnchors object at 0x...&gt;</span>
 
 <span class="sd">        Returns:</span>
@@ -231,7 +231,7 @@
 
 <span class="sd">        Example:</span>
 <span class="sd">            &gt;&gt;&gt; resource = util.Resource(&#39;walkabouts&#39;, &#39;debug&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; config = resource[&#39;walk_up.ini&#39;]</span>
+<span class="sd">            &gt;&gt;&gt; config = resource[&#39;walk_north.ini&#39;]</span>
 <span class="sd">            &gt;&gt;&gt; animation_anchors = AnimAnchors.from_config(config)</span>
 <span class="sd">            &gt;&gt;&gt; animation_anchors.get_anchor_point(&#39;head_anchor&#39;, 0)</span>
 <span class="sd">            &lt;hypatia.animations.AnchorPoint object at 0x...&gt;</span>
@@ -391,13 +391,13 @@
             <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">file_name</span> <span class="o">==</span> <span class="s">&#39;only&#39;</span><span class="p">:</span>
-                <span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Stand</span>
-                <span class="n">direction</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">stand</span>
+                <span class="n">direction</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">action</span><span class="p">,</span> <span class="n">direction</span> <span class="o">=</span> <span class="n">file_name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;_&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-                <span class="n">direction</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="p">,</span> <span class="n">direction</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
-                <span class="n">action</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="p">,</span> <span class="n">action</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+                <span class="n">direction</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
@@ -411,9 +411,13 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">animations</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="n">direction</span><span class="p">:</span> <span class="n">animation</span><span class="p">}</span>
 
             <span class="c"># load anchor points</span>
-            <span class="k">if</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span> <span class="ow">in</span> <span class="n">sprite_files</span><span class="p">:</span>
-                <span class="n">anchors_ini</span> <span class="o">=</span> <span class="n">resource</span><span class="p">[</span><span class="n">file_name</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span><span class="p">]</span>
-                <span class="n">anim_anchors</span> <span class="o">=</span> <span class="n">AnimAnchors</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">file_name</span> <span class="o">+</span> <span class="n">ini</span><span class="p">)</span>
+            <span class="c"># erro here not loading all the time</span>
+            <span class="c"># maybe make the ini exlpicit? this caused porbs</span>
+            <span class="n">associated_ini_name</span> <span class="o">=</span> <span class="n">file_name</span> <span class="o">+</span> <span class="s">&#39;.ini&#39;</span>
+
+            <span class="k">if</span> <span class="n">associated_ini_name</span> <span class="ow">in</span> <span class="n">resource</span><span class="p">:</span>
+                <span class="n">anchors_ini</span> <span class="o">=</span> <span class="n">resource</span><span class="p">[</span><span class="n">associated_ini_name</span><span class="p">]</span>
+                <span class="n">anim_anchors</span> <span class="o">=</span> <span class="n">AnimAnchors</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">anchors_ini</span><span class="p">)</span>
 
                 <span class="k">try</span><span class="p">:</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">animation_anchors</span><span class="p">[</span><span class="n">action</span><span class="p">][</span><span class="n">direction</span><span class="p">]</span> <span class="o">=</span> <span class="n">anim_anchors</span>
@@ -428,9 +432,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">getMaxSize</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">topleft_float</span> <span class="o">=</span> <span class="n">topleft_float</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Stand</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">speed_in_pixels_per_second</span> <span class="o">=</span> <span class="mf">20.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">stand</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">child_walkabouts</span> <span class="o">=</span> <span class="n">children</span> <span class="ow">or</span> <span class="p">[]</span>
 
 <div class="viewcode-block" id="Walkabout.__getitem__"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.Walkabout.__getitem__">[docs]</a>    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
@@ -445,7 +448,7 @@
 
 <span class="sd">        Examples:</span>
 <span class="sd">            &gt;&gt;&gt; walkabout = Walkabout(&#39;debug&#39;)</span>
-<span class="sd">            &gt;&gt;&gt; walkabout[constants.Action.Walk][constants.Direction.Up]</span>
+<span class="sd">            &gt;&gt;&gt; walkabout[constants.Action.walk][constants.Direction.south]</span>
 <span class="sd">            &lt;pyganim.PygAnimation object at 0x...&gt;</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -579,13 +582,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">animations</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">actions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Stand</span><span class="p">,)</span>
-            <span class="n">directions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span><span class="p">,)</span>
+            <span class="n">actions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">stand</span><span class="p">,)</span>
+            <span class="n">directions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">,)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">actions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Walk</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Stand</span><span class="p">)</span>
-            <span class="n">directions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Up</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span><span class="p">,</span>
-                          <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Left</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Right</span><span class="p">)</span>
+            <span class="n">actions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">walk</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">stand</span><span class="p">)</span>
+            <span class="n">directions</span> <span class="o">=</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">,</span>
+                          <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
 
@@ -741,7 +744,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

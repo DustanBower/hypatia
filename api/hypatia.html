@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia package &mdash; hypatia 0.2.14 documentation</title>
+    <title>hypatia package &mdash; hypatia 0.2.16 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.14',
+        VERSION:     '0.2.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.14 documentation" href="index.html" />
+    <link rel="top" title="hypatia 0.2.16 documentation" href="index.html" />
     <link rel="prev" title="Hypatia API Documentation" href="index.html" /> 
   </head>
   <body>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="index.html" title="Hypatia API Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">hypatia 0.2.14 documentation</a> &raquo;</li> 
+        <li><a href="index.html">hypatia 0.2.16 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -74,7 +74,7 @@ storing data that tends to be common between the Player, NPCs, enemies,
 etalia, a common example being statistics like hit-points.</p>
 <dl class="class">
 <dt id="hypatia.actor.Actor">
-<em class="property">class </em><tt class="descclassname">hypatia.actor.</tt><tt class="descname">Actor</tt><big>(</big><em>walkabout=None</em><big>)</big><a class="reference internal" href="_modules/hypatia/actor.html#Actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.actor.Actor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hypatia.actor.</tt><tt class="descname">Actor</tt><big>(</big><em>walkabout</em>, <em>say_text=None</em><big>)</big><a class="reference internal" href="_modules/hypatia/actor.html#Actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.actor.Actor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>The base class for any entity which can perform actions.</p>
 <p>For example, both <tt class="xref py py-class docutils literal"><span class="pre">player.Player</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">player.NPC</span></tt>
@@ -87,8 +87,34 @@ objects but the implementation does not prevent this.</p>
 <dl class="attribute">
 <dt id="hypatia.actor.Actor.walkabout">
 <tt class="descname">walkabout</tt><a class="headerlink" href="#hypatia.actor.Actor.walkabout" title="Permalink to this definition">¶</a></dt>
-<dd><p>An instance of <tt class="xref py py-class docutils literal"><span class="pre">animations.Walkabout</span></tt>.</p>
+<dd><p><tt class="xref py py-class docutils literal"><span class="pre">animations.Walkabout</span></tt> &#8211; instance.</p>
 </dd></dl>
+
+<dl class="attribute">
+<dt id="hypatia.actor.Actor.direction">
+<tt class="descname">direction</tt><a class="reference internal" href="_modules/hypatia/actor.html#Actor.direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.actor.Actor.direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>An intsance of <tt class="xref py py-class docutils literal"><span class="pre">constants.Direction</span></tt></p>
+<p>This property indicates the direction the actor is facing.
+Is it possible to set this property to a new value.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><tt class="xref py py-exc docutils literal"><span class="pre">AttributeError</span></tt> &#8211; If the new value is not a valid object
+of the <tt class="xref py py-class docutils literal"><span class="pre">constants.Direction</span></tt> class.</li>
+<li><tt class="xref py py-exc docutils literal"><span class="pre">TypeError</span></tt> &#8211; If one tries to delete this property</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hypatia.actor.Actor.say">
+<tt class="descname">say</tt><big>(</big><em>at_direction</em>, <em>dialogbox</em><big>)</big><a class="reference internal" href="_modules/hypatia/actor.html#Actor.say"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.actor.Actor.say" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -231,7 +257,7 @@ e.g., <em>head_anchor</em>.</p>
 
 <p class="rubric">Example</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">resource</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Resource</span><span class="p">(</span><span class="s">&#39;walkabouts&#39;</span><span class="p">,</span> <span class="s">&#39;debug&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">anchors</span> <span class="o">=</span> <span class="n">AnimAnchors</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">resource</span><span class="p">[</span><span class="s">&#39;walk_up.ini&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">anchors</span> <span class="o">=</span> <span class="n">AnimAnchors</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">resource</span><span class="p">[</span><span class="s">&#39;walk_north.ini&#39;</span><span class="p">])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">anchors</span><span class="o">.</span><span class="n">anchor_points</span><span class="p">[</span><span class="s">&#39;head_anchor&#39;</span><span class="p">]</span>
 <span class="go">[&lt;hypatia.animations.AnchorPoint object at 0x...&gt;, ...]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">anchors</span><span class="o">.</span><span class="n">anchor_groups</span>
@@ -285,7 +311,7 @@ for three different frames:</p>
 </table>
 <p class="rubric">Example</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">resource</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Resource</span><span class="p">(</span><span class="s">&#39;walkabouts&#39;</span><span class="p">,</span> <span class="s">&#39;debug&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">AnimAnchors</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">resource</span><span class="p">[</span><span class="s">&#39;walk_up.ini&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AnimAnchors</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">resource</span><span class="p">[</span><span class="s">&#39;walk_north.ini&#39;</span><span class="p">])</span>
 <span class="go">&lt;hypatia.animations.AnimAnchors object at 0x...&gt;</span>
 </pre></div>
 </div>
@@ -332,7 +358,7 @@ isn&#8217;t defined for frame.</p>
 </div>
 <p class="rubric">Example</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">resource</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Resource</span><span class="p">(</span><span class="s">&#39;walkabouts&#39;</span><span class="p">,</span> <span class="s">&#39;debug&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">resource</span><span class="p">[</span><span class="s">&#39;walk_up.ini&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">config</span> <span class="o">=</span> <span class="n">resource</span><span class="p">[</span><span class="s">&#39;walk_north.ini&#39;</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">animation_anchors</span> <span class="o">=</span> <span class="n">AnimAnchors</span><span class="o">.</span><span class="n">from_config</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">animation_anchors</span><span class="o">.</span><span class="n">get_anchor_point</span><span class="p">(</span><span class="s">&#39;head_anchor&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="go">&lt;hypatia.animations.AnchorPoint object at 0x...&gt;</span>
@@ -437,7 +463,7 @@ sprites for this action (key).</td>
 </table>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">walkabout</span> <span class="o">=</span> <span class="n">Walkabout</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">walkabout</span><span class="p">[</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Walk</span><span class="p">][</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Up</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">walkabout</span><span class="p">[</span><span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">walk</span><span class="p">][</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">]</span>
 <span class="go">&lt;pyganim.PygAnimation object at 0x...&gt;</span>
 </pre></div>
 </div>
@@ -563,7 +589,7 @@ parameters.</p>
 <p class="rubric">Examples</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">animations</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sprite</span> <span class="o">=</span> <span class="n">animations</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sprite</span><span class="o">.</span><span class="n">animations</span><span class="p">[</span><span class="n">Action</span><span class="o">.</span><span class="n">Walk</span><span class="p">][</span><span class="n">Direction</span><span class="o">.</span><span class="n">Right</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sprite</span><span class="o">.</span><span class="n">animations</span><span class="p">[</span><span class="n">Action</span><span class="o">.</span><span class="n">walk</span><span class="p">][</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">]</span>
 <span class="go">&lt;pyganim.PygAnimation object at 0x...&gt;</span>
 </pre></div>
 </div>
@@ -578,7 +604,38 @@ parameters.</p>
 <dt id="hypatia.constants.Direction">
 <em class="property">class </em><tt class="descclassname">hypatia.constants.</tt><tt class="descname">Direction</tt><a class="reference internal" href="_modules/hypatia/constants.html#Direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.constants.Direction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">enum.Enum</span></tt></p>
-<p>Specific to movement of a sprite/surface.</p>
+<p>Compass direction. Specific to movement of a sprite/surfac.</p>
+<p>Inspired by Unix numerical permissions. Only ever combined with
+one other direction max.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-class docutils literal"><span class="pre">physics.Velocity</span></tt></p>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">I don&#8217;t  see a point in having a separate class for ordinal
+and cardinal classes.</p>
+</div>
+<dl class="method">
+<dt id="hypatia.constants.Direction.__add__">
+<tt class="descname">__add__</tt><big>(</big><em>other_direction</em><big>)</big><a class="reference internal" href="_modules/hypatia/constants.html#Direction.__add__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.constants.Direction.__add__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine one cardinal direction with another to get
+an ordinal direction.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>other_direction</strong> (<a class="reference internal" href="#hypatia.constants.Direction" title="hypatia.constants.Direction"><tt class="xref py py-class docutils literal"><span class="pre">Direction</span></tt></a>) &#8211; <p>&#8211;</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">an ordinal direction.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#hypatia.constants.Direction" title="hypatia.constants.Direction"><tt class="xref py py-class docutils literal"><span class="pre">Direction</span></tt></a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -663,18 +720,18 @@ false if escape pressed.</td>
 <dt id="hypatia.game.Game.move_player">
 <tt class="descname">move_player</tt><big>(</big><em>direction</em><big>)</big><a class="reference internal" href="_modules/hypatia/game.html#Game.move_player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.game.Game.move_player" title="Permalink to this definition">¶</a></dt>
 <dd><p>Modify human player&#8217;s positional data legally (check
-for collisions).</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p>Will round down to nearest probable step
-if full step is impassable.</p>
-<p class="last">Needs to use velocity instead...</p>
+for collisions).
+.. note:</p>
+<div class="highlight-python"><div class="highlight"><pre>Will round down to nearest probable step
+if full step is impassable.
+Needs to use velocity instead...
+</pre></div>
 </div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction</strong> (<em>constants.Direction</em>) &#8211; may be one of: Up, Right, Down, Left</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction</strong> (<em>constants.Direction</em>) &#8211; </td>
 </tr>
 </tbody>
 </table>
@@ -744,9 +801,30 @@ denoting the starting position for human player.</p>
 
 <dl class="class">
 <dt id="hypatia.physics.Velocity">
-<em class="property">class </em><tt class="descclassname">hypatia.physics.</tt><tt class="descname">Velocity</tt><big>(</big><em>speed</em>, <em>up=0</em>, <em>up_right=0</em>, <em>up_left=0</em>, <em>left=0</em>, <em>right=0</em>, <em>down=0</em>, <em>down_right=0</em>, <em>down_left=0</em><big>)</big><a class="reference internal" href="_modules/hypatia/physics.html#Velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.physics.Velocity" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hypatia.physics.</tt><tt class="descname">Velocity</tt><big>(</big><em>x=0</em>, <em>y=0</em><big>)</big><a class="reference internal" href="_modules/hypatia/physics.html#Velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.physics.Velocity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Eight-directional velocity.</p>
+<dl class="method">
+<dt id="hypatia.physics.Velocity.get_direction">
+<tt class="descname">get_direction</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/physics.html#Velocity.get_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.physics.Velocity.get_direction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a direction which corresponds to the current 2D
+velocity.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-class docutils literal"><span class="pre">constants.Direction</span></tt></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">&#8211;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">constants.Direction</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -758,26 +836,21 @@ denoting the starting position for human player.</p>
 <p class="last">Could even be something like a sign! Or the human player.</p>
 </div>
 <dl class="class">
-<dt id="hypatia.player.Npc">
-<em class="property">class </em><tt class="descclassname">hypatia.player.</tt><tt class="descname">Npc</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#Npc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.Npc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#hypatia.player.Player" title="hypatia.player.Player"><tt class="xref py py-class docutils literal"><span class="pre">hypatia.player.Player</span></tt></a></p>
+<dt id="hypatia.player.HumanPlayer">
+<em class="property">class </em><tt class="descclassname">hypatia.player.</tt><tt class="descname">HumanPlayer</tt><big>(</big><em>walkabout=None</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#HumanPlayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.HumanPlayer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hypatia.actor.Actor" title="hypatia.actor.Actor"><tt class="xref py py-class docutils literal"><span class="pre">hypatia.actor.Actor</span></tt></a></p>
 <dl class="method">
-<dt id="hypatia.player.Npc.say">
-<tt class="descname">say</tt><big>(</big><em>at_direction</em>, <em>dialogbox</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#Npc.say"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.Npc.say" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="hypatia.player.HumanPlayer.talk">
+<tt class="descname">talk</tt><big>(</big><em>npcs</em>, <em>dialogbox</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#HumanPlayer.talk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.HumanPlayer.talk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to talk in current direction.</p>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="class">
-<dt id="hypatia.player.Player">
-<em class="property">class </em><tt class="descclassname">hypatia.player.</tt><tt class="descname">Player</tt><big>(</big><em>walkabout=None</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#Player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.Player" title="Permalink to this definition">¶</a></dt>
+<dt id="hypatia.player.Npc">
+<em class="property">class </em><tt class="descclassname">hypatia.player.</tt><tt class="descname">Npc</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#Npc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.Npc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hypatia.actor.Actor" title="hypatia.actor.Actor"><tt class="xref py py-class docutils literal"><span class="pre">hypatia.actor.Actor</span></tt></a></p>
-<dl class="method">
-<dt id="hypatia.player.Player.talk">
-<tt class="descname">talk</tt><big>(</big><em>npcs</em>, <em>dialogbox</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#Player.talk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.Player.talk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attempt to talk in current direction.</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -1231,7 +1304,7 @@ referenced in gif_path.</td>
 </table>
 <p class="rubric">Example</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;resources/walkabouts/debug.zip&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">file_name</span> <span class="o">=</span> <span class="s">&#39;debug/walk_up.gif&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file_name</span> <span class="o">=</span> <span class="s">&#39;debug/walk_north.gif&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">load_gif</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span>
 <span class="go">&lt;pyganim.PygAnimation object at 0x...&gt;</span>
@@ -1264,7 +1337,7 @@ referenced in gif_path.</td>
 <p class="rubric">Example</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;resources/walkabouts/debug.zip&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">file_name</span> <span class="o">=</span> <span class="s">&#39;debug/walk_up.gif&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file_name</span> <span class="o">=</span> <span class="s">&#39;debug/walk_north.gif&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gif</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pil_to_pygame</span><span class="p">(</span><span class="n">gif</span><span class="p">,</span> <span class="s">&quot;RGBA&quot;</span><span class="p">)</span>
@@ -1348,7 +1421,7 @@ and so on.</p>
         <li class="right" >
           <a href="index.html" title="Hypatia API Documentation"
              >previous</a> |</li>
-        <li><a href="index.html">hypatia 0.2.14 documentation</a> &raquo;</li> 
+        <li><a href="index.html">hypatia 0.2.16 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.game &mdash; hypatia 0.2.14 documentation</title>
+    <title>hypatia.game &mdash; hypatia 0.2.16 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.14',
+        VERSION:     '0.2.16',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.14 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.16 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -121,7 +121,7 @@
 
             <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KEYUP</span><span class="p">:</span>
                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span>
-                 <span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">action</span><span class="p">)</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Stand</span>
+                 <span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">action</span><span class="p">)</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">stand</span>
 
             <span class="c"># need to trap player in a next loop, release when no next</span>
             <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KEYDOWN</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">K_SPACE</span><span class="p">:</span>
@@ -144,77 +144,80 @@
             <span class="k">return</span> <span class="bp">False</span>
 
         <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_UP</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">move_player</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Up</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">move_player</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_RIGHT</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">move_player</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Right</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">move_player</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_DOWN</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">move_player</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">move_player</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_LEFT</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">move_player</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Left</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">move_player</span><span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">True</span>
-</div>
+
+    <span class="c"># NOTE: outdated/needs to be updated for velocity</span></div>
 <div class="viewcode-block" id="Game.move_player"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.Game.move_player">[docs]</a>    <span class="k">def</span> <span class="nf">move_player</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">direction</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Modify human player&#39;s positional data legally (check</span>
 <span class="sd">        for collisions).</span>
-
 <span class="sd">        Note:</span>
 <span class="sd">          Will round down to nearest probable step</span>
 <span class="sd">          if full step is impassable.</span>
-
 <span class="sd">          Needs to use velocity instead...</span>
-
 <span class="sd">        Args:</span>
-<span class="sd">          direction (constants.Direction): may be one of: Up, Right, Down, Left</span>
+<span class="sd">          direction (constants.Direction):</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="n">player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span>
-        <span class="n">player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
-        <span class="n">planned_movement_in_pixels</span> <span class="o">=</span> <span class="p">(</span><span class="n">player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span>
-                                      <span class="n">speed_in_pixels_per_second</span><span class="p">)</span>
+        <span class="n">human_player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span>
+        <span class="n">human_player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
+
+        <span class="c"># hack for incorporating new velocity system, will update later</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">):</span>
+            <span class="n">planned_movement_in_pixels</span> <span class="o">=</span> <span class="n">human_player</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">planned_movement_in_pixels</span> <span class="o">=</span> <span class="n">human_player</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">x</span>
+
         <span class="n">adj_speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">time_elapsed_milliseconds</span> <span class="o">/</span> <span class="mf">1000.0</span>
         <span class="n">iter_pixels</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">planned_movement_in_pixels</span><span class="p">)])</span>
 
         <span class="c"># test a series of positions</span>
         <span class="k">for</span> <span class="n">pixels</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iter_pixels</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
             <span class="c"># create a rectangle at the new position</span>
-            <span class="n">new_topleft_x</span><span class="p">,</span> <span class="n">new_topleft_y</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">topleft_float</span>
+            <span class="n">new_topleft_x</span><span class="p">,</span> <span class="n">new_topleft_y</span> <span class="o">=</span> <span class="n">human_player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">topleft_float</span>
 
             <span class="c"># what&#39;s going on here</span>
             <span class="k">if</span> <span class="n">pixels</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
                 <span class="n">adj_speed</span> <span class="o">=</span> <span class="mi">1</span>
 
-            <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Up</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">:</span>
                 <span class="n">new_topleft_y</span> <span class="o">-=</span> <span class="n">pixels</span> <span class="o">*</span> <span class="n">adj_speed</span>
-            <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Right</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">:</span>
                 <span class="n">new_topleft_x</span> <span class="o">+=</span> <span class="n">pixels</span> <span class="o">*</span> <span class="n">adj_speed</span>
-            <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Down</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">:</span>
                 <span class="n">new_topleft_y</span> <span class="o">+=</span> <span class="n">pixels</span> <span class="o">*</span> <span class="n">adj_speed</span>
-            <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">Left</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">:</span>
                 <span class="n">new_topleft_x</span> <span class="o">-=</span> <span class="n">pixels</span> <span class="o">*</span> <span class="n">adj_speed</span>
 
             <span class="n">destination_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">new_topleft_x</span><span class="p">,</span> <span class="n">new_topleft_y</span><span class="p">),</span>
-                                           <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span>
-                                            <span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
-            <span class="n">collision_rect</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">destination_rect</span><span class="p">)</span>
+                                           <span class="n">human_player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">collision_rect</span> <span class="o">=</span> <span class="p">(</span><span class="n">human_player</span><span class="o">.</span>
+                              <span class="n">walkabout</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">destination_rect</span><span class="p">))</span>
 
             <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">collide_check</span><span class="p">(</span><span class="n">collision_rect</span><span class="p">):</span>
                 <span class="c"># we&#39;re done, we can move!</span>
                 <span class="n">new_topleft</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_topleft_x</span><span class="p">,</span> <span class="n">new_topleft_y</span><span class="p">)</span>
-                <span class="n">player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Walk</span>
-                <span class="n">animation</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">current_animation</span><span class="p">()</span>
-                <span class="n">player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">getMaxSize</span><span class="p">()</span>
-                <span class="n">player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">destination_rect</span>
-                <span class="n">player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">topleft_float</span> <span class="o">=</span> <span class="n">new_topleft</span>
+                <span class="n">human_player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">walk</span>
+                <span class="n">animation</span> <span class="o">=</span> <span class="n">human_player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">current_animation</span><span class="p">()</span>
+                <span class="n">human_player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">getMaxSize</span><span class="p">()</span>
+                <span class="n">human_player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">destination_rect</span>
+                <span class="n">human_player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">topleft_float</span> <span class="o">=</span> <span class="n">new_topleft</span>
 
                 <span class="k">return</span> <span class="bp">True</span>
 
         <span class="c"># never found an applicable destination</span>
-        <span class="n">player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">Stand</span>
+        <span class="n">human_player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">stand</span>
 
         <span class="k">return</span> <span class="bp">False</span>
 </div>
@@ -252,7 +255,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span>
                                                <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="o">.</span><span class="n">surface</span><span class="p">,</span>
                                                <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">topleft</span>
-                                             <span class="p">)</span>
+                                              <span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">layer</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">tilemap</span><span class="o">.</span><span class="n">layer_images</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="mi">1</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">viewport</span><span class="o">.</span><span class="n">blit</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span>
@@ -319,7 +322,7 @@
         <span class="n">human_walkabout</span> <span class="o">=</span> <span class="n">animations</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">,</span>
                                                <span class="n">position</span><span class="o">=</span><span class="n">start_position</span><span class="p">,</span>
                                                <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">hat</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_player</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">Player</span><span class="p">(</span><span class="n">walkabout</span><span class="o">=</span><span class="n">human_walkabout</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_player</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">HumanPlayer</span><span class="p">(</span><span class="n">walkabout</span><span class="o">=</span><span class="n">human_walkabout</span><span class="p">)</span>
 
         <span class="c"># npcs.ini</span>
         <span class="n">npcs_ini_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">scene_directory</span><span class="p">,</span> <span class="s">&#39;npcs.ini&#39;</span><span class="p">)</span>
@@ -392,7 +395,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.14 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.16 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

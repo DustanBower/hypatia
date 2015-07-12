@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.util &mdash; hypatia 0.2.17 documentation</title>
+    <title>hypatia.util &mdash; hypatia 0.2.18 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.17',
+        VERSION:     '0.2.18',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.17 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.18 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.17 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.18 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -73,7 +73,7 @@
 <span class="sd">    supplying a resource category and name.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">      files (dict): Key is file name, value can be one of StringIO,</span>
+<span class="sd">      files (dict): Key is file name, value can be one of str,</span>
 <span class="sd">        BytesIO, PygAnim, or ConfigParser objects.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -107,10 +107,11 @@
                     <span class="k">continue</span>
 
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">file_data</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">file_data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">))</span>
+                    <span class="n">file_data</span> <span class="o">=</span> <span class="n">file_data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
 
                     <span class="c"># returns (file path, file extension)</span>
                     <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;.ini&#39;</span><span class="p">:</span>
+                        <span class="n">file_data</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
                         <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
 
                         <span class="c"># NOTE: this still works in python 3, though it was</span>
@@ -273,7 +274,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.17 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.18 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

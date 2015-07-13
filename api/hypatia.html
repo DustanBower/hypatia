@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia package &mdash; hypatia 0.2.18 documentation</title>
+    <title>hypatia package &mdash; hypatia 0.2.24 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.18',
+        VERSION:     '0.2.24',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.18 documentation" href="index.html" />
+    <link rel="top" title="hypatia 0.2.24 documentation" href="index.html" />
     <link rel="prev" title="Hypatia API Documentation" href="index.html" /> 
   </head>
   <body>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="index.html" title="Hypatia API Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">hypatia 0.2.18 documentation</a> &raquo;</li> 
+        <li><a href="index.html">hypatia 0.2.24 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -634,6 +634,7 @@ an ordinal direction.</p>
 </tr>
 </tbody>
 </table>
+<p class="rubric">Example</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span> <span class="o">+</span> <span class="n">Direction</span><span class="o">.</span><span class="n">north</span> <span class="o">==</span> <span class="n">Direction</span><span class="o">.</span><span class="n">north_east</span>
 <span class="go">True</span>
 </pre></div>
@@ -1246,7 +1247,9 @@ True</p>
 <em class="property">class </em><tt class="descclassname">hypatia.util.</tt><tt class="descname">Resource</tt><big>(</big><em>resource_category</em>, <em>resource_name</em><big>)</big><a class="reference internal" href="_modules/hypatia/util.html#Resource"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.util.Resource" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>A zip archive in the resources directory, located by
-supplying a resource category and name.</p>
+supplying a resource category and name. Files are stored
+as a str, BytesIO, PygAnimation, or ConfigParser, in a
+dictionary. Files are referenced by filepath/filename.</p>
 <dl class="attribute">
 <dt id="hypatia.util.Resource.files">
 <tt class="descname">files</tt><a class="headerlink" href="#hypatia.util.Resource.files" title="Permalink to this definition">¶</a></dt>
@@ -1254,6 +1257,18 @@ supplying a resource category and name.</p>
 BytesIO, PygAnim, or ConfigParser objects.</p>
 </dd></dl>
 
+<p class="rubric">Example</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyganim</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resource</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;walkabouts&#39;</span><span class="p">,</span> <span class="s">&#39;debug&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;walk_north.gif&#39;</span> <span class="ow">in</span> <span class="n">resource</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">isinstance</span><span class="p">(</span><span class="n">resource</span><span class="p">[</span><span class="s">&#39;walk_north.gif&#39;</span><span class="p">],</span> <span class="n">pyganim</span><span class="o">.</span><span class="n">PygAnimation</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resource</span> <span class="o">=</span> <span class="n">Resource</span><span class="p">(</span><span class="s">&#39;scenes&#39;</span><span class="p">,</span> <span class="s">&#39;debug&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resource</span><span class="p">[</span><span class="s">&#39;tilemap.txt&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+</pre></div>
+</div>
 <dl class="method">
 <dt id="hypatia.util.Resource.get_type">
 <tt class="descname">get_type</tt><big>(</big><em>file_extension</em><big>)</big><a class="reference internal" href="_modules/hypatia/util.html#Resource.get_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.util.Resource.get_type" title="Permalink to this definition">¶</a></dt>
@@ -1288,6 +1303,11 @@ None is returned.</td>
 </dd></dl>
 
 <dl class="function">
+<dt id="hypatia.util.configparser_fromfp">
+<tt class="descclassname">hypatia.util.</tt><tt class="descname">configparser_fromfp</tt><big>(</big><em>file_data</em><big>)</big><a class="reference internal" href="_modules/hypatia/util.html#configparser_fromfp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.util.configparser_fromfp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
 <dt id="hypatia.util.load_gif">
 <tt class="descclassname">hypatia.util.</tt><tt class="descname">load_gif</tt><big>(</big><em>path_or_bytesio</em><big>)</big><a class="reference internal" href="_modules/hypatia/util.html#load_gif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.util.load_gif" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a PygAnim object by reading a GIF from path or
@@ -1308,7 +1328,7 @@ referenced in gif_path.</td>
 </table>
 <p class="rubric">Example</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;resources/walkabouts/debug.zip&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">file_name</span> <span class="o">=</span> <span class="s">&#39;debug/walk_north.gif&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file_name</span> <span class="o">=</span> <span class="s">&#39;walk_north.gif&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">load_gif</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span>
 <span class="go">&lt;pyganim.PygAnimation object at 0x...&gt;</span>
@@ -1341,7 +1361,7 @@ referenced in gif_path.</td>
 <p class="rubric">Example</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">path</span> <span class="o">=</span> <span class="s">&#39;resources/walkabouts/debug.zip&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">file_name</span> <span class="o">=</span> <span class="s">&#39;debug/walk_north.gif&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">file_name</span> <span class="o">=</span> <span class="s">&#39;walk_north.gif&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">gif</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">sample</span><span class="p">))</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">pil_to_pygame</span><span class="p">(</span><span class="n">gif</span><span class="p">,</span> <span class="s">&quot;RGBA&quot;</span><span class="p">)</span>
@@ -1425,7 +1445,7 @@ and so on.</p>
         <li class="right" >
           <a href="index.html" title="Hypatia API Documentation"
              >previous</a> |</li>
-        <li><a href="index.html">hypatia 0.2.18 documentation</a> &raquo;</li> 
+        <li><a href="index.html">hypatia 0.2.24 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

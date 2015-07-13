@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.util &mdash; hypatia 0.2.18 documentation</title>
+    <title>hypatia.util &mdash; hypatia 0.2.24 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.18',
+        VERSION:     '0.2.24',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.18 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.24 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.18 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.24 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -70,11 +70,24 @@
 
 <div class="viewcode-block" id="Resource"><a class="viewcode-back" href="../../hypatia.html#hypatia.util.Resource">[docs]</a><span class="k">class</span> <span class="nc">Resource</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;A zip archive in the resources directory, located by</span>
-<span class="sd">    supplying a resource category and name.</span>
+<span class="sd">    supplying a resource category and name. Files are stored</span>
+<span class="sd">    as a str, BytesIO, PygAnimation, or ConfigParser, in a</span>
+<span class="sd">    dictionary. Files are referenced by filepath/filename.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">      files (dict): Key is file name, value can be one of str,</span>
-<span class="sd">        BytesIO, PygAnim, or ConfigParser objects.</span>
+<span class="sd">        files (dict): Key is file name, value can be one of str,</span>
+<span class="sd">            BytesIO, PygAnim, or ConfigParser objects.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        &gt;&gt;&gt; import pyganim</span>
+<span class="sd">        &gt;&gt;&gt; resource = Resource(&#39;walkabouts&#39;, &#39;debug&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; &#39;walk_north.gif&#39; in resource</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; isinstance(resource[&#39;walk_north.gif&#39;], pyganim.PygAnimation)</span>
+<span class="sd">        True</span>
+<span class="sd">        &gt;&gt;&gt; resource = Resource(&#39;scenes&#39;, &#39;debug&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; resource[&#39;tilemap.txt&#39;].startswith(&#39;debug&#39;)</span>
+<span class="sd">        True</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -82,8 +95,8 @@
         <span class="sd">&quot;&quot;&quot;Load a resource ZIP using a category and zip name.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">          resource_category (str): E.g., tilesheets, walkabouts.</span>
-<span class="sd">          resource_name (str): E.g., debug.</span>
+<span class="sd">            resource_category (str): E.g., tilesheets, walkabouts.</span>
+<span class="sd">            resource_name (str): E.g., debug.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -92,38 +105,34 @@
                                 <span class="n">resource_category</span><span class="p">,</span>
                                 <span class="n">resource_name</span> <span class="o">+</span> <span class="s">&#39;.zip&#39;</span>
                                <span class="p">)</span>
+        <span class="n">file_handlers</span> <span class="o">=</span> <span class="p">{</span>
+                         <span class="s">&#39;.ini&#39;</span><span class="p">:</span> <span class="n">configparser_fromfp</span><span class="p">,</span>
+                         <span class="s">&#39;.gif&#39;</span><span class="p">:</span> <span class="n">load_gif</span>
+                        <span class="p">}</span>
+
         <span class="n">files</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zip_path</span><span class="p">)</span> <span class="k">as</span> <span class="n">zip_file</span><span class="p">:</span>
 
             <span class="k">for</span> <span class="n">file_name</span> <span class="ow">in</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">namelist</span><span class="p">():</span>
                 <span class="n">file_data</span> <span class="o">=</span> <span class="n">zip_file</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-                <span class="n">file_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
 
                 <span class="c"># because namelist will also generate</span>
-                <span class="c"># the current directory</span>
+                <span class="c"># the directories</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">file_name</span><span class="p">:</span>
 
                     <span class="k">continue</span>
 
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">file_data</span> <span class="o">=</span> <span class="n">file_data</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s">&#39;utf-8&#39;</span><span class="p">)</span>
-
-                    <span class="c"># returns (file path, file extension)</span>
-                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;.ini&#39;</span><span class="p">:</span>
-                        <span class="n">file_data</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
-                        <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
-
-                        <span class="c"># NOTE: this still works in python 3, though it was</span>
-                        <span class="c"># replaced by config.read_file()</span>
-                        <span class="n">config</span><span class="o">.</span><span class="n">readfp</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
-                        <span class="n">file_data</span> <span class="o">=</span> <span class="n">config</span>
-
                 <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
                     <span class="n">file_data</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
 
-                    <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s">&#39;.gif&#39;</span><span class="p">:</span>
-                        <span class="n">file_data</span> <span class="o">=</span> <span class="n">load_gif</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
+                <span class="c"># then we do the file handler call ehre</span>
+                <span class="n">file_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">file_name</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">file_extension</span> <span class="ow">in</span> <span class="n">file_handlers</span><span class="p">:</span>
+                    <span class="n">file_data</span> <span class="o">=</span> <span class="n">file_handlers</span><span class="p">[</span><span class="n">file_extension</span><span class="p">](</span><span class="n">file_data</span><span class="p">)</span>
 
                 <span class="n">files</span><span class="p">[</span><span class="n">file_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">file_data</span>
 
@@ -179,7 +188,7 @@
 
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; path = &#39;resources/walkabouts/debug.zip&#39;</span>
-<span class="sd">        &gt;&gt;&gt; file_name = &#39;debug/walk_north.gif&#39;</span>
+<span class="sd">        &gt;&gt;&gt; file_name = &#39;walk_north.gif&#39;</span>
 <span class="sd">        &gt;&gt;&gt; sample = zipfile.ZipFile(path).open(file_name).read()</span>
 <span class="sd">        &gt;&gt;&gt; load_gif(BytesIO(sample))</span>
 <span class="sd">        &lt;pyganim.PygAnimation object at 0x...&gt;</span>
@@ -223,7 +232,7 @@
 <span class="sd">    Example:</span>
 <span class="sd">        &gt;&gt;&gt; from PIL import Image</span>
 <span class="sd">        &gt;&gt;&gt; path = &#39;resources/walkabouts/debug.zip&#39;</span>
-<span class="sd">        &gt;&gt;&gt; file_name = &#39;debug/walk_north.gif&#39;</span>
+<span class="sd">        &gt;&gt;&gt; file_name = &#39;walk_north.gif&#39;</span>
 <span class="sd">        &gt;&gt;&gt; sample = zipfile.ZipFile(path).open(file_name).read()</span>
 <span class="sd">        &gt;&gt;&gt; gif = Image.open(BytesIO(sample))</span>
 <span class="sd">        &gt;&gt;&gt; pil_to_pygame(gif, &quot;RGBA&quot;)</span>
@@ -237,7 +246,18 @@
                                    <span class="n">image_as_string</span><span class="p">,</span>
                                    <span class="n">pil_image</span><span class="o">.</span><span class="n">size</span><span class="p">,</span>
                                    <span class="s">&#39;RGBA&#39;</span>
-                                  <span class="p">)</span></div>
+                                  <span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="configparser_fromfp"><a class="viewcode-back" href="../../hypatia.html#hypatia.util.configparser_fromfp">[docs]</a><span class="k">def</span> <span class="nf">configparser_fromfp</span><span class="p">(</span><span class="n">file_data</span><span class="p">):</span>
+    <span class="n">file_data</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">configparser</span><span class="o">.</span><span class="n">ConfigParser</span><span class="p">()</span>
+
+    <span class="c"># NOTE: this still works in python 3, though it was</span>
+    <span class="c"># replaced by config.read_file()</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">readfp</span><span class="p">(</span><span class="n">file_data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">config</span></div>
 </pre></div>
 
           </div>
@@ -274,7 +294,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.18 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.24 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

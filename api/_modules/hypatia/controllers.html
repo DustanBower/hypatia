@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>hypatia.controllers &mdash; hypatia 0.2.25 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2.25',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="top" title="hypatia 0.2.25 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for hypatia.controllers</h1><div class="highlight"><pre>
+<span class="c"># This module is part of Hypatia and is released under the</span>
+<span class="c"># MIT License: http://opensource.org/licenses/MIT</span>
+
+<span class="sd">&quot;&quot;&quot;Anything to do with game controls.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">pygame</span>
+<span class="kn">from</span> <span class="nn">pygame.locals</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">constants</span>
+
+
+<div class="viewcode-block" id="GameController"><a class="viewcode-back" href="../../hypatia.html#hypatia.controllers.GameController">[docs]</a><span class="k">class</span> <span class="nc">GameController</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base input controller, &quot;game pad,&quot; which is inherited</span>
+<span class="sd">    by all input classes/controllers.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>
+
+</div>
+<div class="viewcode-block" id="WorldController"><a class="viewcode-back" href="../../hypatia.html#hypatia.controllers.WorldController">[docs]</a><span class="k">class</span> <span class="nc">WorldController</span><span class="p">(</span><span class="n">GameController</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;For the overworld.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="WorldController.handle_input"><a class="viewcode-back" href="../../hypatia.html#hypatia.controllers.WorldController.handle_input">[docs]</a>    <span class="k">def</span> <span class="nf">handle_input</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;for overworld</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">          bool: returns True if escape was never pressed; returns</span>
+<span class="sd">            false if escape pressed.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
+
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KEYUP</span><span class="p">:</span>
+                <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span>
+                 <span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">action</span><span class="p">)</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">stand</span>
+
+            <span class="c"># need to trap player in a next loop, release when no next</span>
+            <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KEYDOWN</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">K_SPACE</span><span class="p">:</span>
+
+                <span class="c"># do until</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">dialogbox</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">dialogbox</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span>
+                     <span class="o">.</span><span class="n">talk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">npcs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">dialogbox</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">dialogbox</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">True</span>
+
+        <span class="n">pressed_keys</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_ESCAPE</span><span class="p">]:</span>
+
+            <span class="k">return</span> <span class="bp">False</span>
+
+        <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_UP</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span>
+                                              <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_RIGHT</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span>
+                                              <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_DOWN</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span>
+                                              <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_LEFT</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span>
+                                              <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">True</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../../index.html">
+              <img class="logo" src="../../_static/logotype-whitetext-transparentbg.png" alt="Logo"/>
+            </a></p>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, Lillian Lynn Lemmer.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

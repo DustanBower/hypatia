@@ -7,7 +7,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Index &mdash; hypatia 0.2.24 documentation</title>
+    <title>Index &mdash; hypatia 0.2.25 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -15,7 +15,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.24',
+        VERSION:     '0.2.25',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -25,7 +25,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.24 documentation" href="index.html" /> 
+    <link rel="top" title="hypatia 0.2.25 documentation" href="index.html" /> 
   </head>
   <body>
     <div class="related">
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">hypatia 0.2.24 documentation</a> &raquo;</li> 
+        <li><a href="index.html">hypatia 0.2.25 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -205,6 +205,10 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
+  <dt><a href="hypatia.html#hypatia.constants.Direction.cardinal">cardinal() (hypatia.constants.Direction class method)</a>
+  </dt>
+
+      
   <dt><a href="hypatia.html#hypatia.render.Viewport.center_on">center_on() (hypatia.render.Viewport method)</a>
   </dt>
 
@@ -213,7 +217,7 @@
   </dt>
 
       
-  <dt><a href="hypatia.html#hypatia.game.Game.collide_check">collide_check() (hypatia.game.Game method)</a>
+  <dt><a href="hypatia.html#hypatia.game.Scene.collide_check">collide_check() (hypatia.game.Scene method)</a>
   </dt>
 
   </dl></td>
@@ -278,18 +282,22 @@
   <dt><a href="hypatia.html#hypatia.render.Screen.FPS">FPS (hypatia.render.Screen attribute)</a>
   </dt>
 
-  </dl></td>
-  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="hypatia.html#hypatia.animations.AnimAnchors.from_config">from_config() (hypatia.animations.AnimAnchors class method)</a>
   </dt>
 
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="hypatia.html#hypatia.tiles.Tilesheet.from_resources">from_resources() (hypatia.tiles.Tilesheet class method)</a>
   </dt>
 
       
   <dt><a href="hypatia.html#hypatia.tiles.TileMap.from_string">from_string() (hypatia.tiles.TileMap class method)</a>
+  </dt>
+
+      
+  <dt><a href="hypatia.html#hypatia.constants.Direction.from_velocity">from_velocity() (hypatia.constants.Direction class method)</a>
   </dt>
 
   </dl></td>
@@ -303,6 +311,10 @@
   </dt>
 
       
+  <dt><a href="hypatia.html#hypatia.controllers.GameController">GameController (class in hypatia.controllers)</a>
+  </dt>
+
+      
   <dt><a href="hypatia.html#hypatia.animations.Walkabout.get_anchor">get_anchor() (hypatia.animations.Walkabout method)</a>
   </dt>
 
@@ -310,14 +322,10 @@
   <dt><a href="hypatia.html#hypatia.animations.AnimAnchors.get_anchor_point">get_anchor_point() (hypatia.animations.AnimAnchors method)</a>
   </dt>
 
-      
-  <dt><a href="hypatia.html#hypatia.animations.Walkabout.get_anchors">get_anchors() (hypatia.animations.Walkabout method)</a>
-  </dt>
-
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="hypatia.html#hypatia.physics.Velocity.get_direction">get_direction() (hypatia.physics.Velocity method)</a>
+  <dt><a href="hypatia.html#hypatia.animations.Walkabout.get_anchors">get_anchors() (hypatia.animations.Walkabout method)</a>
   </dt>
 
       
@@ -335,7 +343,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="hypatia.html#hypatia.game.Game.handle_input">handle_input() (hypatia.game.Game method)</a>
+  <dt><a href="hypatia.html#hypatia.controllers.WorldController.handle_input">handle_input() (hypatia.controllers.WorldController method)</a>
   </dt>
 
       
@@ -344,6 +352,10 @@
 
       
   <dt><a href="hypatia.html#hypatia.player.HumanPlayer">HumanPlayer (class in hypatia.player)</a>
+  </dt>
+
+      
+  <dt><a href="hypatia.html#hypatia.game.Hypatia">Hypatia (class in hypatia.game)</a>
   </dt>
 
       
@@ -363,11 +375,15 @@
   </dt>
 
       
-  <dt><a href="hypatia.html#module-hypatia.dialog">hypatia.dialog (module)</a>
+  <dt><a href="hypatia.html#module-hypatia.controllers">hypatia.controllers (module)</a>
   </dt>
 
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="hypatia.html#module-hypatia.dialog">hypatia.dialog (module)</a>
+  </dt>
+
       
   <dt><a href="hypatia.html#module-hypatia.game">hypatia.game (module)</a>
   </dt>
@@ -435,7 +451,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="hypatia.html#hypatia.game.Game.move_player">move_player() (hypatia.game.Game method)</a>
+  <dt><a href="hypatia.html#hypatia.player.HumanPlayer.move">move() (hypatia.player.HumanPlayer method)</a>
   </dt>
 
   </dl></td>
@@ -599,7 +615,7 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="hypatia.html#hypatia.player.HumanPlayer.talk">talk() (hypatia.player.HumanPlayer method)</a>
+  <dt><a href="hypatia.html#hypatia.actor.Actor.talk">talk() (hypatia.actor.Actor method)</a>
   </dt>
 
       
@@ -680,10 +696,14 @@
   <dt><a href="hypatia.html#hypatia.animations.Walkabout">Walkabout (class in hypatia.animations)</a>
   </dt>
 
+      
+  <dt><a href="hypatia.html#hypatia.actor.Actor.walkabout">walkabout (hypatia.actor.Actor attribute)</a>
+  </dt>
+
   </dl></td>
   <td style="width: 33%" valign="top"><dl>
       
-  <dt><a href="hypatia.html#hypatia.actor.Actor.walkabout">walkabout (hypatia.actor.Actor attribute)</a>
+  <dt><a href="hypatia.html#hypatia.controllers.WorldController">WorldController (class in hypatia.controllers)</a>
   </dt>
 
   </dl></td>
@@ -696,6 +716,16 @@
   <dt><a href="hypatia.html#hypatia.animations.AnchorPoint.x">x (hypatia.animations.AnchorPoint attribute)</a>
   </dt>
 
+      
+  <dt><a href="hypatia.html#hypatia.constants.Direction.x_minus">x_minus() (hypatia.constants.Direction class method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="hypatia.html#hypatia.constants.Direction.x_plus">x_plus() (hypatia.constants.Direction class method)</a>
+  </dt>
+
   </dl></td>
 </tr></table>
 
@@ -704,6 +734,16 @@
   <td style="width: 33%" valign="top"><dl>
       
   <dt><a href="hypatia.html#hypatia.animations.AnchorPoint.y">y (hypatia.animations.AnchorPoint attribute)</a>
+  </dt>
+
+      
+  <dt><a href="hypatia.html#hypatia.constants.Direction.y_minus">y_minus() (hypatia.constants.Direction class method)</a>
+  </dt>
+
+  </dl></td>
+  <td style="width: 33%" valign="top"><dl>
+      
+  <dt><a href="hypatia.html#hypatia.constants.Direction.y_plus">y_plus() (hypatia.constants.Direction class method)</a>
   </dt>
 
   </dl></td>
@@ -748,7 +788,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="index.html">hypatia 0.2.24 documentation</a> &raquo;</li> 
+        <li><a href="index.html">hypatia 0.2.25 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

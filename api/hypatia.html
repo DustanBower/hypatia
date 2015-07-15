@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia package &mdash; hypatia 0.2.24 documentation</title>
+    <title>hypatia package &mdash; hypatia 0.2.25 documentation</title>
     
     <link rel="stylesheet" href="_static/default.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.24',
+        VERSION:     '0.2.25',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.24 documentation" href="index.html" />
+    <link rel="top" title="hypatia 0.2.25 documentation" href="index.html" />
     <link rel="prev" title="Hypatia API Documentation" href="index.html" /> 
   </head>
   <body>
@@ -40,7 +40,7 @@
         <li class="right" >
           <a href="index.html" title="Hypatia API Documentation"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">hypatia 0.2.24 documentation</a> &raquo;</li> 
+        <li><a href="index.html">hypatia 0.2.25 documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
@@ -74,7 +74,7 @@ storing data that tends to be common between the Player, NPCs, enemies,
 etalia, a common example being statistics like hit-points.</p>
 <dl class="class">
 <dt id="hypatia.actor.Actor">
-<em class="property">class </em><tt class="descclassname">hypatia.actor.</tt><tt class="descname">Actor</tt><big>(</big><em>walkabout</em>, <em>say_text=None</em><big>)</big><a class="reference internal" href="_modules/hypatia/actor.html#Actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.actor.Actor" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hypatia.actor.</tt><tt class="descname">Actor</tt><big>(</big><em>walkabout</em>, <em>say_text=None</em>, <em>velocity=None</em><big>)</big><a class="reference internal" href="_modules/hypatia/actor.html#Actor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.actor.Actor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>The base class for any entity which can perform actions.</p>
 <p>For example, both <tt class="xref py py-class docutils literal"><span class="pre">player.Player</span></tt> and <tt class="xref py py-class docutils literal"><span class="pre">player.NPC</span></tt>
@@ -115,6 +115,12 @@ of the <tt class="xref py py-class docutils literal"><span class="pre">constants
 <dt id="hypatia.actor.Actor.say">
 <tt class="descname">say</tt><big>(</big><em>at_direction</em>, <em>dialogbox</em><big>)</big><a class="reference internal" href="_modules/hypatia/actor.html#Actor.say"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.actor.Actor.say" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="method">
+<dt id="hypatia.actor.Actor.talk">
+<tt class="descname">talk</tt><big>(</big><em>npcs</em>, <em>dialogbox</em><big>)</big><a class="reference internal" href="_modules/hypatia/actor.html#Actor.talk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.actor.Actor.talk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Attempt to talk in current direction.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -641,6 +647,88 @@ an ordinal direction.</p>
 </div>
 </dd></dl>
 
+<dl class="classmethod">
+<dt id="hypatia.constants.Direction.cardinal">
+<em class="property">classmethod </em><tt class="descname">cardinal</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/constants.html#Direction.cardinal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.constants.Direction.cardinal" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="hypatia.constants.Direction.from_velocity">
+<em class="property">classmethod </em><tt class="descname">from_velocity</tt><big>(</big><em>velocity</em><big>)</big><a class="reference internal" href="_modules/hypatia/constants.html#Direction.from_velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.constants.Direction.from_velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a direction which corresponds to the current 2D
+velocity.</p>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><tt class="xref py py-class docutils literal"><span class="pre">constants.Direction</span></tt></p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">&#8211;</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">constants.Direction</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="hypatia.constants.Direction.x_minus">
+<em class="property">classmethod </em><tt class="descname">x_minus</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/constants.html#Direction.x_minus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.constants.Direction.x_minus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="hypatia.constants.Direction.x_plus">
+<em class="property">classmethod </em><tt class="descname">x_plus</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/constants.html#Direction.x_plus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.constants.Direction.x_plus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="hypatia.constants.Direction.y_minus">
+<em class="property">classmethod </em><tt class="descname">y_minus</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/constants.html#Direction.y_minus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.constants.Direction.y_minus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="hypatia.constants.Direction.y_plus">
+<em class="property">classmethod </em><tt class="descname">y_plus</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/constants.html#Direction.y_plus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.constants.Direction.y_plus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-hypatia.controllers">
+<span id="hypatia-controllers-module"></span><h2>hypatia.controllers module<a class="headerlink" href="#module-hypatia.controllers" title="Permalink to this headline">¶</a></h2>
+<p>Anything to do with game controls.</p>
+<dl class="class">
+<dt id="hypatia.controllers.GameController">
+<em class="property">class </em><tt class="descclassname">hypatia.controllers.</tt><tt class="descname">GameController</tt><big>(</big><em>game</em><big>)</big><a class="reference internal" href="_modules/hypatia/controllers.html#GameController"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.controllers.GameController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Base input controller, &#8220;game pad,&#8221; which is inherited
+by all input classes/controllers.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="hypatia.controllers.WorldController">
+<em class="property">class </em><tt class="descclassname">hypatia.controllers.</tt><tt class="descname">WorldController</tt><big>(</big><em>game</em><big>)</big><a class="reference internal" href="_modules/hypatia/controllers.html#WorldController"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.controllers.WorldController" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#hypatia.controllers.GameController" title="hypatia.controllers.GameController"><tt class="xref py py-class docutils literal"><span class="pre">hypatia.controllers.GameController</span></tt></a></p>
+<p>For the overworld.</p>
+<dl class="method">
+<dt id="hypatia.controllers.WorldController.handle_input">
+<tt class="descname">handle_input</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/controllers.html#WorldController.handle_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.controllers.WorldController.handle_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>for overworld</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns True if escape was never pressed; returns
+false if escape pressed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </dd></dl>
 
 </div>
@@ -699,50 +787,6 @@ Flask&#8217;s app.</p>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Simulates the interaction between game components.</p>
 <dl class="method">
-<dt id="hypatia.game.Game.collide_check">
-<tt class="descname">collide_check</tt><big>(</big><em>rect</em><big>)</big><a class="reference internal" href="_modules/hypatia/game.html#Game.collide_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.game.Game.collide_check" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns True if there are collisions with rect.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="hypatia.game.Game.handle_input">
-<tt class="descname">handle_input</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/game.html#Game.handle_input"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.game.Game.handle_input" title="Permalink to this definition">¶</a></dt>
-<dd><p>...</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns True if escape was never pressed; returns
-false if escape pressed.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">bool</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="hypatia.game.Game.move_player">
-<tt class="descname">move_player</tt><big>(</big><em>direction</em><big>)</big><a class="reference internal" href="_modules/hypatia/game.html#Game.move_player"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.game.Game.move_player" title="Permalink to this definition">¶</a></dt>
-<dd><p>Modify human player&#8217;s positional data legally (check
-for collisions).
-.. note:</p>
-<div class="highlight-python"><div class="highlight"><pre>Will round down to nearest probable step
-if full step is impassable.
-Needs to use velocity instead...
-</pre></div>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction</strong> (<em>constants.Direction</em>) &#8211; </td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="hypatia.game.Game.render">
 <tt class="descname">render</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/game.html#Game.render"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.game.Game.render" title="Permalink to this definition">¶</a></dt>
 <dd><p>Drawing behavior for game objects.</p>
@@ -753,6 +797,12 @@ Needs to use velocity instead...
 <tt class="descname">start_loop</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/game.html#Game.start_loop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.game.Game.start_loop" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="class">
+<dt id="hypatia.game.Hypatia">
+<em class="property">class </em><tt class="descclassname">hypatia.game.</tt><tt class="descname">Hypatia</tt><big>(</big><em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/hypatia/game.html#Hypatia"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.game.Hypatia" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 </dd></dl>
 
 <dl class="class">
@@ -786,6 +836,12 @@ denoting the starting position for human player.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="hypatia.game.Scene.collide_check">
+<tt class="descname">collide_check</tt><big>(</big><em>rect</em><big>)</big><a class="reference internal" href="_modules/hypatia/game.html#Scene.collide_check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.game.Scene.collide_check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if there are collisions with rect.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="hypatia.game.Scene.runtime_setup">
 <tt class="descname">runtime_setup</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/game.html#Scene.runtime_setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.game.Scene.runtime_setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize al the NPCs, tilemap, etc.</p>
@@ -809,27 +865,6 @@ denoting the starting position for human player.</p>
 <em class="property">class </em><tt class="descclassname">hypatia.physics.</tt><tt class="descname">Velocity</tt><big>(</big><em>x=0</em>, <em>y=0</em><big>)</big><a class="reference internal" href="_modules/hypatia/physics.html#Velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.physics.Velocity" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
 <p>Eight-directional velocity.</p>
-<dl class="method">
-<dt id="hypatia.physics.Velocity.get_direction">
-<tt class="descname">get_direction</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/hypatia/physics.html#Velocity.get_direction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.physics.Velocity.get_direction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a direction which corresponds to the current 2D
-velocity.</p>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<p class="last"><tt class="xref py py-class docutils literal"><span class="pre">constants.Direction</span></tt></p>
-</div>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">&#8211;</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">constants.Direction</span></tt></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -842,12 +877,27 @@ velocity.</p>
 </div>
 <dl class="class">
 <dt id="hypatia.player.HumanPlayer">
-<em class="property">class </em><tt class="descclassname">hypatia.player.</tt><tt class="descname">HumanPlayer</tt><big>(</big><em>walkabout=None</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#HumanPlayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.HumanPlayer" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><tt class="descclassname">hypatia.player.</tt><tt class="descname">HumanPlayer</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#HumanPlayer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.HumanPlayer" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#hypatia.actor.Actor" title="hypatia.actor.Actor"><tt class="xref py py-class docutils literal"><span class="pre">hypatia.actor.Actor</span></tt></a></p>
 <dl class="method">
-<dt id="hypatia.player.HumanPlayer.talk">
-<tt class="descname">talk</tt><big>(</big><em>npcs</em>, <em>dialogbox</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#HumanPlayer.talk"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.HumanPlayer.talk" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attempt to talk in current direction.</p>
+<dt id="hypatia.player.HumanPlayer.move">
+<tt class="descname">move</tt><big>(</big><em>game</em>, <em>direction</em><big>)</big><a class="reference internal" href="_modules/hypatia/player.html#HumanPlayer.move"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#hypatia.player.HumanPlayer.move" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modify human player&#8217;s positional data legally (check
+for collisions).
+.. note:</p>
+<div class="highlight-python"><div class="highlight"><pre>Will round down to nearest probable step
+if full step is impassable.
+Needs to use velocity instead...
+</pre></div>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>direction</strong> (<em>constants.Direction</em>) &#8211; </td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </dd></dl>
@@ -1395,6 +1445,7 @@ and so on.</p>
 <li><a class="reference internal" href="#module-hypatia.actor">hypatia.actor module</a></li>
 <li><a class="reference internal" href="#module-hypatia.animations">hypatia.animations module</a></li>
 <li><a class="reference internal" href="#module-hypatia.constants">hypatia.constants module</a></li>
+<li><a class="reference internal" href="#module-hypatia.controllers">hypatia.controllers module</a></li>
 <li><a class="reference internal" href="#module-hypatia.dialog">hypatia.dialog module</a></li>
 <li><a class="reference internal" href="#module-hypatia.game">hypatia.game module</a></li>
 <li><a class="reference internal" href="#module-hypatia.physics">hypatia.physics module</a></li>
@@ -1445,7 +1496,7 @@ and so on.</p>
         <li class="right" >
           <a href="index.html" title="Hypatia API Documentation"
              >previous</a> |</li>
-        <li><a href="index.html">hypatia 0.2.24 documentation</a> &raquo;</li> 
+        <li><a href="index.html">hypatia 0.2.25 documentation</a> &raquo;</li> 
       </ul>
     </div>
     <div class="footer">

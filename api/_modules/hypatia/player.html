@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.player &mdash; hypatia 0.2.24 documentation</title>
+    <title>hypatia.player &mdash; hypatia 0.2.25 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.24',
+        VERSION:     '0.2.25',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.24 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.25 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.24 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -55,40 +55,78 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">import</span> <span class="nn">pygame</span>
+
 <span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">constants</span>
 <span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">actor</span>
 
 
 <div class="viewcode-block" id="HumanPlayer"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.HumanPlayer">[docs]</a><span class="k">class</span> <span class="nc">HumanPlayer</span><span class="p">(</span><span class="n">actor</span><span class="o">.</span><span class="n">Actor</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walkabout</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
-        <span class="n">actor</span><span class="o">.</span><span class="n">Actor</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walkabout</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">actor</span><span class="o">.</span><span class="n">Actor</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="HumanPlayer.talk"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.HumanPlayer.talk">[docs]</a>    <span class="k">def</span> <span class="nf">talk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npcs</span><span class="p">,</span> <span class="n">dialogbox</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Attempt to talk in current direction.</span>
+    <span class="c"># NOTE: outdated/needs to be updated for velocity</span>
+<div class="viewcode-block" id="HumanPlayer.move"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.HumanPlayer.move">[docs]</a>    <span class="k">def</span> <span class="nf">move</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">game</span><span class="p">,</span> <span class="n">direction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Modify human player&#39;s positional data legally (check</span>
+<span class="sd">        for collisions).</span>
+<span class="sd">        Note:</span>
+<span class="sd">          Will round down to nearest probable step</span>
+<span class="sd">          if full step is impassable.</span>
+<span class="sd">          Needs to use velocity instead...</span>
+<span class="sd">        Args:</span>
+<span class="sd">          direction (constants.Direction):</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c"># get the current direction, check a bit in front with a rect</span>
-        <span class="c"># to talk to npc if collide</span>
-        <span class="n">facing</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span>
 
-        <span class="k">if</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">:</span>
-            <span class="n">disposition</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">:</span>
-            <span class="n">disposition</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">:</span>
-            <span class="n">disposition</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">facing</span> <span class="ow">is</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">:</span>
-            <span class="n">disposition</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="c"># hack for incorporating new velocity system, will update later</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">(</span><span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">):</span>
+            <span class="n">planned_movement_in_pixels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">y</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">planned_movement_in_pixels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span><span class="o">.</span><span class="n">x</span>
 
-        <span class="n">talk_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">talk_rect</span><span class="o">.</span><span class="n">move_ip</span><span class="p">(</span><span class="n">disposition</span><span class="p">)</span>
+        <span class="n">adj_speed</span> <span class="o">=</span> <span class="n">game</span><span class="o">.</span><span class="n">screen</span><span class="o">.</span><span class="n">time_elapsed_milliseconds</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="n">iter_pixels</span> <span class="o">=</span> <span class="nb">max</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">planned_movement_in_pixels</span><span class="p">)])</span>
 
-        <span class="k">for</span> <span class="n">npc</span> <span class="ow">in</span> <span class="n">npcs</span><span class="p">:</span>
+        <span class="c"># test a series of positions</span>
+        <span class="k">for</span> <span class="n">pixels</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">iter_pixels</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="c"># create a rectangle at the new position</span>
+            <span class="n">new_topleft_x</span><span class="p">,</span> <span class="n">new_topleft_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">topleft_float</span>
 
-            <span class="k">if</span> <span class="n">npc</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">colliderect</span><span class="p">(</span><span class="n">talk_rect</span><span class="p">):</span>
-                <span class="n">npc</span><span class="o">.</span><span class="n">say</span><span class="p">(</span><span class="n">facing</span><span class="p">,</span> <span class="n">dialogbox</span><span class="p">)</span>
+            <span class="c"># what&#39;s going on here</span>
+            <span class="k">if</span> <span class="n">pixels</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                <span class="n">adj_speed</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="k">if</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">:</span>
+                <span class="n">new_topleft_y</span> <span class="o">-=</span> <span class="n">pixels</span> <span class="o">*</span> <span class="n">adj_speed</span>
+            <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">:</span>
+                <span class="n">new_topleft_x</span> <span class="o">+=</span> <span class="n">pixels</span> <span class="o">*</span> <span class="n">adj_speed</span>
+            <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">:</span>
+                <span class="n">new_topleft_y</span> <span class="o">+=</span> <span class="n">pixels</span> <span class="o">*</span> <span class="n">adj_speed</span>
+            <span class="k">elif</span> <span class="n">direction</span> <span class="o">==</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">:</span>
+                <span class="n">new_topleft_x</span> <span class="o">-=</span> <span class="n">pixels</span> <span class="o">*</span> <span class="n">adj_speed</span>
+
+            <span class="n">destination_rect</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">Rect</span><span class="p">((</span><span class="n">new_topleft_x</span><span class="p">,</span> <span class="n">new_topleft_y</span><span class="p">),</span>
+                                           <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+            <span class="n">collision_rect</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">rect</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">destination_rect</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">collide_check</span><span class="p">(</span><span class="n">collision_rect</span><span class="p">):</span>
+                <span class="c"># we&#39;re done, we can move!</span>
+                <span class="n">new_topleft</span> <span class="o">=</span> <span class="p">(</span><span class="n">new_topleft_x</span><span class="p">,</span> <span class="n">new_topleft_y</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">walk</span>
+                <span class="n">animation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">current_animation</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="n">animation</span><span class="o">.</span><span class="n">getMaxSize</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">rect</span> <span class="o">=</span> <span class="n">destination_rect</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">topleft_float</span> <span class="o">=</span> <span class="n">new_topleft</span>
+
+                <span class="k">return</span> <span class="bp">True</span>
+
+        <span class="c"># never found an applicable destination</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">action</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">stand</span>
+
+        <span class="k">return</span> <span class="bp">False</span>
 
 </div></div>
 <div class="viewcode-block" id="Npc"><a class="viewcode-back" href="../../hypatia.html#hypatia.player.Npc">[docs]</a><span class="k">class</span> <span class="nc">Npc</span><span class="p">(</span><span class="n">actor</span><span class="o">.</span><span class="n">Actor</span><span class="p">):</span>
@@ -131,7 +169,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.24 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.controllers &mdash; hypatia 0.2.25 documentation</title>
+    <title>hypatia.controllers &mdash; hypatia 0.2.27 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.25',
+        VERSION:     '0.2.27',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,11 +24,11 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.25 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.27 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -37,21 +37,28 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">hypatia 0.2.27 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for hypatia.controllers</h1><div class="highlight"><pre>
 <span class="c"># This module is part of Hypatia and is released under the</span>
 <span class="c"># MIT License: http://opensource.org/licenses/MIT</span>
 
-<span class="sd">&quot;&quot;&quot;Anything to do with game controls.</span>
+<span class="sd">&quot;&quot;&quot;Anything to do with game controls. Controller objects, which</span>
+<span class="sd">handles the association of input with changing the state of a provided</span>
+<span class="sd">object. For example, the WorldController needs a Game instance</span>
+<span class="sd">(currently) in order to make input reflect and retrieve changes in the</span>
+<span class="sd">Game instance and scene.</span>
+
+<span class="sd">This is a sloppy implementation. I&#39;ll come</span>
+<span class="sd">back to refine it sooner-than-later.</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -62,8 +69,11 @@
 
 
 <div class="viewcode-block" id="GameController"><a class="viewcode-back" href="../../hypatia.html#hypatia.controllers.GameController">[docs]</a><span class="k">class</span> <span class="nc">GameController</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Base input controller, &quot;game pad,&quot; which is inherited</span>
-<span class="sd">    by all input classes/controllers.</span>
+    <span class="sd">&quot;&quot;&quot;Base input controller, &quot;game pad,&quot; which is</span>
+<span class="sd">    inherited by all input classes/controllers.</span>
+
+<span class="sd">    This is handy for having controller</span>
+<span class="sd">    methods which are universal.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -71,24 +81,48 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">game</span> <span class="o">=</span> <span class="n">game</span>
 
 </div>
+<div class="viewcode-block" id="MenuController"><a class="viewcode-back" href="../../hypatia.html#hypatia.controllers.MenuController">[docs]</a><span class="k">class</span> <span class="nc">MenuController</span><span class="p">(</span><span class="n">GameController</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;For menu screens.</span>
+
+<span class="sd">    Scaffolding.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">pass</span>
+
+</div>
 <div class="viewcode-block" id="WorldController"><a class="viewcode-back" href="../../hypatia.html#hypatia.controllers.WorldController">[docs]</a><span class="k">class</span> <span class="nc">WorldController</span><span class="p">(</span><span class="n">GameController</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;For the overworld.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;For the overworld. The controller for manipulating the state</span>
+<span class="sd">    of the general world, when the player is walking about.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="WorldController.handle_input"><a class="viewcode-back" href="../../hypatia.html#hypatia.controllers.WorldController.handle_input">[docs]</a>    <span class="k">def</span> <span class="nf">handle_input</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;for overworld</span>
+        <span class="sd">&quot;&quot;&quot;For the &quot;overworld,&quot; a generic scene where</span>
+<span class="sd">        the player moves about the scene.</span>
+
+<span class="sd">        This is in its infancy.</span>
 
 <span class="sd">        Returns</span>
-<span class="sd">          bool: returns True if escape was never pressed; returns</span>
-<span class="sd">            false if escape pressed.</span>
+<span class="sd">          bool: returns True if escape was never</span>
+<span class="sd">            pressed; returns false if escape pressed.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c"># fetch all the key events and respond to them</span>
         <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">pygame</span><span class="o">.</span><span class="n">event</span><span class="o">.</span><span class="n">get</span><span class="p">():</span>
 
             <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KEYUP</span><span class="p">:</span>
+                <span class="c"># the player specifically let go of a key,</span>
+                <span class="c"># so let&#39;s change the player&#39;s walkabout</span>
+                <span class="c"># action to standing</span>
                 <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span>
                  <span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">action</span><span class="p">)</span> <span class="o">=</span> <span class="n">constants</span><span class="o">.</span><span class="n">Action</span><span class="o">.</span><span class="n">stand</span>
 
+            <span class="c"># This isn&#39;t the best implementation of dialog boxes.</span>
+            <span class="c"># Ideally, I&#39;ll use a MenuController (switch over to one)</span>
+            <span class="c"># in the future.</span>
+            <span class="c">#</span>
             <span class="c"># need to trap player in a next loop, release when no next</span>
             <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">KEYDOWN</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="n">K_SPACE</span><span class="p">:</span>
 
@@ -99,31 +133,37 @@
                     <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span>
                      <span class="o">.</span><span class="n">talk</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">npcs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">dialogbox</span><span class="p">))</span>
 
+        <span class="c"># respond to states</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">dialogbox</span><span class="o">.</span><span class="n">active</span><span class="p">:</span>
 
+            <span class="c"># As long as a dialog box is active the player</span>
+            <span class="c"># cannot hit escape? This seems like bad code.</span>
             <span class="k">return</span> <span class="bp">True</span>
 
+        <span class="c"># get the key states</span>
         <span class="n">pressed_keys</span> <span class="o">=</span> <span class="n">pygame</span><span class="o">.</span><span class="n">key</span><span class="o">.</span><span class="n">get_pressed</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_ESCAPE</span><span class="p">]:</span>
 
+            <span class="c"># the escape key is pressed; we&#39;re</span>
+            <span class="c"># done; quitting time.</span>
             <span class="k">return</span> <span class="bp">False</span>
 
-        <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_UP</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span>
-                                              <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">)</span>
+        <span class="c"># movement from key states (if key is pressed)</span>
+        <span class="c"># map an input key to a direction enumeration,</span>
+        <span class="c"># so when the player is pressing that key,</span>
+        <span class="c"># they will be moving in that direction.</span>
+        <span class="n">movement</span> <span class="o">=</span> <span class="p">{</span>
+                    <span class="n">K_UP</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">,</span>
+                    <span class="n">K_RIGHT</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">,</span>
+                    <span class="n">K_DOWN</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">,</span>
+                    <span class="n">K_LEFT</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">,</span>
+                   <span class="p">}</span>
 
-        <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_RIGHT</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span>
-                                              <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">movement</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
 
-        <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_DOWN</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span>
-                                              <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">K_LEFT</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span>
-                                              <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pressed_keys</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">human_player</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">game</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">True</span></div></div>
 </pre></div>
@@ -131,12 +171,12 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logotype-whitetext-transparentbg.png" alt="Logo"/>
             </a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -153,7 +193,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -162,13 +202,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">hypatia 0.2.27 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Lillian Lynn Lemmer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.animations &mdash; hypatia 0.2.25 documentation</title>
+    <title>hypatia.animations &mdash; hypatia 0.2.27 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.25',
+        VERSION:     '0.2.27',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,11 +24,11 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.25 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.27 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -37,15 +37,15 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">hypatia 0.2.27 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for hypatia.animations</h1><div class="highlight"><pre>
 <span class="c"># This module is part of Hypatia and is released under the</span>
@@ -58,9 +58,10 @@
 
 <span class="sd">Examples of &quot;tools&quot;:</span>
 
-<span class="sd">* functions for creating an animation from a single suface</span>
-<span class="sd">* loading animations from disk</span>
-<span class="sd">* adding frame-dependent positional data</span>
+<span class="sd">  * functions for creating an animation from a single suface</span>
+<span class="sd">  * loading animations from disk</span>
+<span class="sd">  * adding frame-dependent positional data</span>
+<span class="sd">  * contextually-aware sprites</span>
 
 <span class="sd">References:</span>
 <span class="sd">    .. [1] PygAnim:</span>
@@ -75,8 +76,9 @@
 
 <span class="sd">See Also:</span>
 
-<span class="sd">    * :mod:`render`</span>
+<span class="sd">    * :mod:`util`</span>
 <span class="sd">    * :mod:`actor`</span>
+<span class="sd">    * :class:`Walkabout`</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -324,6 +326,8 @@
 </div></div>
 <div class="viewcode-block" id="Walkabout"><a class="viewcode-back" href="../../hypatia.html#hypatia.animations.Walkabout">[docs]</a><span class="k">class</span> <span class="nc">Walkabout</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Sprite animations for a character which walks around.</span>
+
+<span class="sd">    Contextually-aware graphical representation.</span>
 
 <span class="sd">    The walkabout sprites specified to be therein</span>
 <span class="sd">    walkabout_directory, are files with an action__direction.gif</span>
@@ -656,12 +660,12 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logotype-whitetext-transparentbg.png" alt="Logo"/>
             </a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -678,7 +682,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -687,13 +691,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">hypatia 0.2.27 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Lillian Lynn Lemmer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

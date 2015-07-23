@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.constants &mdash; hypatia 0.2.25 documentation</title>
+    <title>hypatia.constants &mdash; hypatia 0.2.27 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.25',
+        VERSION:     '0.2.27',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,11 +24,11 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.25 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.27 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -37,31 +37,42 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">hypatia 0.2.27 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for hypatia.constants</h1><div class="highlight"><pre>
 <span class="c"># This module is part of Hypatia and is released under the</span>
 <span class="c"># MIT License: http://opensource.org/licenses/MIT</span>
 
-<span class="sd">&quot;&quot;&quot;Constants for Hypatia Engine</span>
+<span class="sd">&quot;&quot;&quot;Constants, enumerations for Hypatia.</span>
 
-<span class="sd">Right now this just contains stuff pertaining to Walkabout, i.e.,</span>
-<span class="sd">direction and action specifications. These classes are to be passed as</span>
-<span class="sd">parameters.</span>
+<span class="sd">Generally, these constants and enumerations serve to replace</span>
+<span class="sd">the usage of strings for such paramount attributes like</span>
+<span class="sd">direction and action. The benefit of this model is:</span>
 
-<span class="sd">Examples:</span>
+<span class="sd">  * enhances code clarity</span>
+<span class="sd">  * provides type checking</span>
+<span class="sd">  * provides constants operations, e.g.,</span>
+<span class="sd">    `North + East = North East`.</span>
+<span class="sd">  * class methods to convert one datatype to a constant, like</span>
+<span class="sd">    velocity to direction</span>
+
+<span class="sd">Example:</span>
 <span class="sd">  &gt;&gt;&gt; from hypatia import animations</span>
 <span class="sd">  &gt;&gt;&gt; sprite = animations.Walkabout(&#39;debug&#39;)</span>
 <span class="sd">  &gt;&gt;&gt; sprite.animations[Action.walk][Direction.east]</span>
 <span class="sd">  &lt;pyganim.PygAnimation object at 0x...&gt;</span>
+
+<span class="sd">See Also:</span>
+<span class="sd">   *  :attribute:`actor.Actor.direction`</span>
+<span class="sd">   *  :attribute:`animations.Walkabout.direction`</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -74,8 +85,8 @@
 <div class="viewcode-block" id="Direction"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction">[docs]</a><span class="k">class</span> <span class="nc">Direction</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Compass direction. Specific to movement of a sprite/surface.</span>
 
-<span class="sd">    Inspired by Unix numerical permissions. Only ever combined with</span>
-<span class="sd">    one other direction max.</span>
+<span class="sd">    Inspired by Unix numerical permissions. Only ever</span>
+<span class="sd">    combined with one other direction max.</span>
 
 <span class="sd">    See Also:</span>
 <span class="sd">        :class:`physics.Velocity`</span>
@@ -113,33 +124,68 @@
 
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Direction.cardinal"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction.cardinal">[docs]</a>    <span class="k">def</span> <span class="nf">cardinal</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a tuple of the cardinal directions in the order:</span>
+<span class="sd">        North, East, South, West.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            tuple: (north, east, south, west)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="p">(</span><span class="n">cls</span><span class="o">.</span><span class="n">north</span><span class="p">,</span> <span class="n">cls</span><span class="o">.</span><span class="n">east</span><span class="p">,</span> <span class="n">cls</span><span class="o">.</span><span class="n">south</span><span class="p">,</span> <span class="n">cls</span><span class="o">.</span><span class="n">west</span><span class="p">)</span>
 </div>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Direction.x_plus"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction.x_plus">[docs]</a>    <span class="k">def</span> <span class="nf">x_plus</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the direction associated</span>
+<span class="sd">        with moving RIGHT (+x) on the X-AXIS.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Direction.east</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">east</span>
 </div>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Direction.x_minus"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction.x_minus">[docs]</a>    <span class="k">def</span> <span class="nf">x_minus</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the direction associated</span>
+<span class="sd">        with moving LEFT (-x) on the X-AXIS.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Direction.west</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">west</span>
 </div>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Direction.y_plus"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction.y_plus">[docs]</a>    <span class="k">def</span> <span class="nf">y_plus</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the direction associated</span>
+<span class="sd">        with moving DOWN (+y) on the Y-AXIS.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Direction.south</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">south</span>
 </div>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Direction.y_minus"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction.y_minus">[docs]</a>    <span class="k">def</span> <span class="nf">y_minus</span><span class="p">(</span><span class="n">cls</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the direction associated</span>
+<span class="sd">        with moving UP (-y) on the Y-AXIS.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Direction.north</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">north</span>
 </div>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="Direction.from_velocity"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction.from_velocity">[docs]</a>    <span class="k">def</span> <span class="nf">from_velocity</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">velocity</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return a direction which corresponds to the current 2D</span>
-<span class="sd">        velocity.</span>
+        <span class="sd">&quot;&quot;&quot;Return a direction which corresponds</span>
+<span class="sd">        to the current 2D velocity.</span>
 
 <span class="sd">        See Also:</span>
 <span class="sd">            :class:`constants.Direction`</span>
@@ -149,28 +195,50 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
+        <span class="c"># We&#39;re going to combine the directions</span>
+        <span class="c"># extrapolated from each axis, then</span>
+        <span class="c"># combine them to make a new direction!</span>
         <span class="n">collected_directions</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">axis</span> <span class="ow">in</span> <span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">,</span> <span class="s">&#39;y&#39;</span><span class="p">]:</span>
+            <span class="c"># e.g., call Direction.x_plus() to get the positive</span>
+            <span class="c"># axis direction for &#39;x&#39; (which would be East).</span>
             <span class="n">plus_direction</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Direction</span><span class="p">,</span> <span class="n">axis</span> <span class="o">+</span> <span class="s">&#39;_plus&#39;</span><span class="p">)()</span>
+
+            <span class="c"># e.g., call Direction.y_minus() to get the negative</span>
+            <span class="c"># axis direction for &#39;y&#39; (which would be North).</span>
             <span class="n">minus_direction</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">Direction</span><span class="p">,</span> <span class="n">axis</span> <span class="o">+</span> <span class="s">&#39;_minus&#39;</span><span class="p">)()</span>
+
+            <span class="c"># get the current velocity for this axis, determine</span>
+            <span class="c"># if it&#39;s positive (use plus_direction), negative</span>
+            <span class="c"># (use minus_direction) or neutral (do nothing!).</span>
             <span class="n">axis_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">velocity</span><span class="p">,</span> <span class="n">axis</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">axis_value</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c"># the velocity for this axis is positive,</span>
+                <span class="c"># therefore it is the &quot;plus direction.&quot;</span>
                 <span class="n">collected_directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plus_direction</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">axis_value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c"># the velocity for this axis is neutral,</span>
+                <span class="c"># therefore we cannot extrapolate</span>
+                <span class="c"># direction from velocity.</span>
                 <span class="k">pass</span>
             <span class="k">else</span><span class="p">:</span>
+                <span class="c"># Deductively, the axis value is negative,</span>
+                <span class="c"># therefore it is the &quot;minus_direction.&quot;</span>
                 <span class="n">collected_directions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">minus_direction</span><span class="p">)</span>
 
+        <span class="c"># Cool trick, huh? North + East = North East, so forth.</span>
+        <span class="c"># Be sure to check out Direction.__add__.</span>
         <span class="k">return</span> <span class="n">collected_directions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">collected_directions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 </div>
 <div class="viewcode-block" id="Direction.__add__"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Direction.__add__">[docs]</a>    <span class="k">def</span> <span class="nf">__add__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">other_direction</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Combine one cardinal direction with another to get</span>
-<span class="sd">        an ordinal direction.</span>
+        <span class="sd">&quot;&quot;&quot;Combine one cardinal direction with</span>
+<span class="sd">        another to get an ordinal direction.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            other_direction (:class:`Direction`): --</span>
+<span class="sd">            other_direction (Direction): one of the Direction</span>
+<span class="sd">                enumerations.</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            :class:`Direction`: an ordinal direction.</span>
@@ -188,6 +256,14 @@
 <div class="viewcode-block" id="Action"><a class="viewcode-back" href="../../hypatia.html#hypatia.constants.Action">[docs]</a><span class="k">class</span> <span class="nc">Action</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Specific to movement of a sprite/surface.</span>
 
+<span class="sd">    Attributes:</span>
+<span class="sd">        stand (int): Actor standing/normal/no-input state.</span>
+<span class="sd">        walk (int): Actor walking/moving state. Actor</span>
+<span class="sd">            has velocity.</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        :class:`animations.Walkabout`</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">stand</span> <span class="o">=</span> <span class="mi">1</span>
@@ -197,12 +273,12 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logotype-whitetext-transparentbg.png" alt="Logo"/>
             </a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -219,7 +295,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -228,13 +304,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">hypatia 0.2.27 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Lillian Lynn Lemmer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

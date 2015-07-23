@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.actor &mdash; hypatia 0.2.25 documentation</title>
+    <title>hypatia.actor &mdash; hypatia 0.2.27 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.25',
+        VERSION:     '0.2.27',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,11 +24,11 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.25 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.27 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -37,15 +37,15 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">hypatia 0.2.27 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for hypatia.actor</h1><div class="highlight"><pre>
 <span class="c"># This module is part of Hypatia and is released under the</span>
@@ -53,20 +53,28 @@
 
 <span class="sd">&quot;&quot;&quot;Implementation of actors.</span>
 
-<span class="sd">Actors are the base of any entities which may perform actions. Examples</span>
-<span class="sd">of actors are enemies, NPCs, the player themselves, etc. This module</span>
-<span class="sd">implements a basic :class:`Actor` class to serve as the parent for any</span>
-<span class="sd">classes representing objects such those examples. Any logic which can</span>
-<span class="sd">be shared by all objects belongs in the class, for example, the logic</span>
-<span class="sd">for moving around the game world. This approach makes it possible to</span>
-<span class="sd">allow, for example, enemimes and players to share much of the same</span>
-<span class="sd">behavior, a nd this can be useful by making it easer (from a</span>
-<span class="sd">programming point-of-view) to give monsters the same set of core</span>
-<span class="sd">abilities and logic as NPCs, etc.</span>
+<span class="sd">Actors are the base of any entities (players) which may perform</span>
+<span class="sd">actions, examples include:</span>
+
+<span class="sd">  * human player</span>
+<span class="sd">  * an enemy NPC</span>
+<span class="sd">  * a friendly NPC</span>
+<span class="sd">  * an invisible NPC which simply displays</span>
+<span class="sd">    a message when &quot;talked&quot; to.</span>
+
+<span class="sd">This module implements a basic :class:`Actor` class to serve as</span>
+<span class="sd">the parent for any classes representing objects such as those</span>
+<span class="sd">examples.</span>
+
+<span class="sd">Any logic which can by shared by all &quot;players&quot; belongs in the class,</span>
+<span class="sd">for example, the logic for moving around the game world. This approach</span>
+<span class="sd">makes it possible to allow, for example, enemies and players to share</span>
+<span class="sd">much of the same behavior and this can make it easier to give monsters</span>
+<span class="sd">the same set of core abilities and logic as NPCs, etc.</span>
 
 <span class="sd">When type-checking is necessary the :class:`Actor` class provides a</span>
 <span class="sd">useful way to test for objects which support a bare-minimum of core,</span>
-<span class="sd">shared actions.  The class is also useful in role-playing games for</span>
+<span class="sd">shared actions. The class is also useful in role-playing games for</span>
 <span class="sd">storing data that tends to be common between the Player, NPCs, enemies,</span>
 <span class="sd">etalia, a common example being statistics like hit-points.</span>
 
@@ -80,38 +88,48 @@
 <div class="viewcode-block" id="Actor"><a class="viewcode-back" href="../../hypatia.html#hypatia.actor.Actor">[docs]</a><span class="k">class</span> <span class="nc">Actor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;The base class for any entity which can perform actions.</span>
 
-<span class="sd">    For example, both :class:`player.Player` and :class:`player.NPC`</span>
-<span class="sd">    objects can move around the game world. This is the type of action</span>
-<span class="sd">    which is shared by all &quot;actors&quot; and therefore best implemented in</span>
-<span class="sd">    this class, allowing it to be shared by as many entities as</span>
-<span class="sd">    possible, e.g. enemies.</span>
+<span class="sd">    For example, most actors can move around the game world, so</span>
+<span class="sd">    there are tools for setting the &quot;direction&quot; the actor is</span>
+<span class="sd">    facing. Another example: most actors can say something, offer</span>
+<span class="sd">    some dialog. These are the types of actions which are shared</span>
+<span class="sd">    by all/most actors and therefore best implemented in this class,</span>
+<span class="sd">    allowing it to be shared by as many players as possible, e.g.,</span>
+<span class="sd">    human player, enemies.</span>
 
-<span class="sd">    It is typically not useful to directly instantiate :class:`Actor`</span>
-<span class="sd">    objects but the implementation does not prevent this.</span>
+<span class="sd">    Note:</span>
+<span class="sd">      It is typically not useful to directly instantiate :class:`Actor`</span>
+<span class="sd">      objects but the implementation does not prevent this.</span>
 
 <span class="sd">    Attributes:</span>
-<span class="sd">        walkabout (:class:`animations.Walkabout`): instance.</span>
+<span class="sd">        walkabout (animations.Walkabout): --</span>
+<span class="sd">        direction (constants.Direction): --</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        :mod:`actor`</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walkabout</span><span class="p">,</span> <span class="n">say_text</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">walkabout</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">say_text</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Constructs a new Actor.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            walkabout (:class:`animations.Walkabout`): Walkabout which</span>
-<span class="sd">                is then accessible via the ``walkabout`` property. This</span>
-<span class="sd">                argument is optional and defaults to new instance</span>
-<span class="sd">                of :class:`animations.Walkabout`.</span>
+<span class="sd">            walkabout (Optional[animations.Walkabout]): Optionally</span>
+<span class="sd">                set a walkabout property, which will graphically</span>
+<span class="sd">                represent the actor.</span>
+<span class="sd">            say_text (Optional[str]): Optionally set the text which</span>
+<span class="sd">                is displayed when this actor&#39;s :meth:`Actor.say()`</span>
+<span class="sd">                is called.</span>
+<span class="sd">            velocity (Optional[physics.Velocity]): --</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span> <span class="o">=</span> <span class="n">walkabout</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">say_text</span> <span class="o">=</span> <span class="n">say_text</span> <span class="ow">or</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">say_text</span> <span class="o">=</span> <span class="n">say_text</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">velocity</span> <span class="o">=</span> <span class="n">velocity</span> <span class="ow">or</span> <span class="n">physics</span><span class="o">.</span><span class="n">Velocity</span><span class="p">()</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;An intsance of :class:`constants.Direction`</span>
+        <span class="sd">&quot;&quot;&quot;An instance of :class:`constants.Direction`</span>
 
 <span class="sd">        This property indicates the direction the actor is facing.</span>
 <span class="sd">        Is it possible to set this property to a new value.</span>
@@ -122,10 +140,22 @@
 <span class="sd">            TypeError: If one tries to delete this property</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span>
 
     <span class="nd">@direction.setter</span>
     <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_direction</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the direction this actor is facing.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            new_direction (constants.Direction): The new direction</span>
+<span class="sd">                for the actor to face.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            AttributeError: If the new value is not a valid object</span>
+<span class="sd">                of the :class:`constants.Direction` class.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_direction</span><span class="p">,</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="p">):</span>
 
@@ -136,11 +166,40 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">walkabout</span><span class="o">.</span><span class="n">direction</span> <span class="o">=</span> <span class="n">new_direction</span>
 
     <span class="nd">@direction.deleter</span>
-<div class="viewcode-block" id="Actor.direction"><a class="viewcode-back" href="../../hypatia.html#hypatia.actor.Actor.direction">[docs]</a>    <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">direction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;You are not allowed to delete the direction of an Actor.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            TypeError: If one tries to delete this property</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s">&quot;Cannot delete the &#39;direction&#39; of an Actor&quot;</span><span class="p">)</span>
-</div>
+
 <div class="viewcode-block" id="Actor.say"><a class="viewcode-back" href="../../hypatia.html#hypatia.actor.Actor.say">[docs]</a>    <span class="k">def</span> <span class="nf">say</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">at_direction</span><span class="p">,</span> <span class="n">dialogbox</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Change this actor&#39;s direction, and say this actor&#39;s</span>
+<span class="sd">        say_text in the global dialog box.</span>
+
+<span class="sd">        This method is typically called by another</span>
+<span class="sd">        actor&#39;s :meth:`actor.Actor.talk()`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            at_direction (constants.Direction): The new direction</span>
+<span class="sd">                for this actor to face.</span>
+<span class="sd">            dialogbox (dialog.DialogBox): the DialogBox to print</span>
+<span class="sd">                this actor&#39;s say_text to.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: True if this actor can and did say something, False</span>
+<span class="sd">                if this actor cannot say something. This quality is</span>
+<span class="sd">                determined by the presence of say_text.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Even if this actor doesn&#39;t say anything, it will</span>
+<span class="sd">            change the direction it&#39;s facing.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">facing</span> <span class="o">=</span> <span class="p">{</span>
                   <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">north</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">south</span><span class="p">,</span>
                   <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">east</span><span class="p">:</span> <span class="n">constants</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">west</span><span class="p">,</span>
@@ -151,9 +210,29 @@
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">say_text</span><span class="p">:</span>
             <span class="n">dialogbox</span><span class="o">.</span><span class="n">set_message</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">say_text</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="bp">True</span>
+
+        <span class="k">else</span><span class="p">:</span>
+
+            <span class="k">return</span> <span class="bp">False</span>
 </div>
 <div class="viewcode-block" id="Actor.talk"><a class="viewcode-back" href="../../hypatia.html#hypatia.actor.Actor.talk">[docs]</a>    <span class="k">def</span> <span class="nf">talk</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">npcs</span><span class="p">,</span> <span class="n">dialogbox</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Attempt to talk in current direction.</span>
+        <span class="sd">&quot;&quot;&quot;Trigger another actor&#39;s :meth:`actor.Actor.say()` if</span>
+<span class="sd">        they are immediately *in front* of this actor.</span>
+
+<span class="sd">        See Also:</span>
+<span class="sd">            * :attribute:`animations.Walkabout.direction`</span>
+<span class="sd">            * :attribute:`Actor.direction`</span>
+<span class="sd">            * :meth:`actor.Actor.say()`</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            npcs (List[player.Npc]): NPCs to check for</span>
+<span class="sd">                collisions immediately in front of this</span>
+<span class="sd">                actor.</span>
+<span class="sd">            dialogbox (dialog.DialogBox): The dialogbox which</span>
+<span class="sd">                another actor will print to if they have</span>
+<span class="sd">                something to say.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -182,12 +261,12 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logotype-whitetext-transparentbg.png" alt="Logo"/>
             </a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -204,7 +283,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -213,13 +292,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">hypatia 0.2.27 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Lillian Lynn Lemmer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>

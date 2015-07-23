@@ -6,15 +6,15 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>hypatia.game &mdash; hypatia 0.2.25 documentation</title>
+    <title>hypatia.game &mdash; hypatia 0.2.27 documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.25',
+        VERSION:     '0.2.27',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -24,11 +24,11 @@
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
     <link rel="shortcut icon" href="../../_static/favicon.ico"/>
-    <link rel="top" title="hypatia 0.2.25 documentation" href="../../index.html" />
+    <link rel="top" title="hypatia 0.2.27 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -37,15 +37,15 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
-          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">hypatia 0.2.27 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for hypatia.game</h1><div class="highlight"><pre>
 <span class="c"># This module is part of Hypatia and is released under the</span>
@@ -71,6 +71,7 @@
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="kn">as</span> <span class="nn">ET</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">ConfigParser</span> <span class="kn">as</span> <span class="nn">configparser</span>
@@ -91,6 +92,90 @@
 <span class="kn">from</span> <span class="nn">hypatia</span> <span class="kn">import</span> <span class="n">controllers</span>
 
 
+<div class="viewcode-block" id="TMXMissingPlayerStartPosition"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.TMXMissingPlayerStartPosition">[docs]</a><span class="k">class</span> <span class="nc">TMXMissingPlayerStartPosition</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;TMX file parsed does not have a player start</span>
+<span class="sd">    position, which is required to create scenes.</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        :class:`TMX`</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="s">&quot;TMX file missing player_start_position&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TMXMissingPlayerStartPosition</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="TMXTooManyTilesheets"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.TMXTooManyTilesheets">[docs]</a><span class="k">class</span> <span class="nc">TMXTooManyTilesheets</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A TMX file was attempted to be imported through</span>
+<span class="sd">    `TileMap.from_tmx()`, but the TMX defined more than</span>
+<span class="sd">    one tilesheet. This is a feature Hypatia does not</span>
+<span class="sd">    support.</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        :meth:`TileMap.from_tmx()` and :class:`TMX`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The exception message is this class&#39; docstring.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Mostly scaffolding, plus won&#39;t be here for long.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">message</span> <span class="o">=</span> <span class="n">TMXTooManyTilesheets</span><span class="o">.</span><span class="n">__docstring__</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TMXTooManyTilesheets</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="TMXVersionUnsupported"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.TMXVersionUnsupported">[docs]</a><span class="k">class</span> <span class="nc">TMXVersionUnsupported</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Attempted to create a TileMap from a TMX map, but</span>
+<span class="sd">    the TMX map version is unsupported.</span>
+
+<span class="sd">    Attribs:</span>
+<span class="sd">        map_version (str): the version which was attempted</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">map_version</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            map_version (str): the map version which is</span>
+<span class="sd">                unsupported. This becomes the map_version</span>
+<span class="sd">                attribute.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">message</span> <span class="o">=</span> <span class="s">&#39;version </span><span class="si">%s</span><span class="s"> unsupported&#39;</span> <span class="o">%</span> <span class="n">map_version</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TMXVersionUnsupported</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">map_version</span> <span class="o">=</span> <span class="n">map_version</span>
+
+</div>
+<div class="viewcode-block" id="TMXLayersNotCSV"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.TMXLayersNotCSV">[docs]</a><span class="k">class</span> <span class="nc">TMXLayersNotCSV</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The data encoding used for layers during Tilemap.from_tmx()</span>
+<span class="sd">    is not supported. Only CSV is supported.</span>
+
+<span class="sd">    Attribs:</span>
+<span class="sd">        data_encoding (str): the failed data encoding.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_encoding</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            data_encoding (str): the failed data encoding</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">message</span> <span class="o">=</span> <span class="s">&#39;tmx layer data encoding </span><span class="si">%s</span><span class="s"> unsupported&#39;</span> <span class="o">%</span> <span class="n">data_encoding</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">TMXLayersNotCSV</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_encodign</span> <span class="o">=</span> <span class="n">data_encoding</span>
+
+
+<span class="c"># not in use</span></div>
 <div class="viewcode-block" id="Hypatia"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.Hypatia">[docs]</a><span class="k">class</span> <span class="nc">Hypatia</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -102,7 +187,7 @@
 <div class="viewcode-block" id="Game"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.Game">[docs]</a><span class="k">class</span> <span class="nc">Game</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulates the interaction between game components.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">scene_name</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">screen</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">scene</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
                  <span class="n">viewport_size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">dialogbox</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">screen</span> <span class="o">=</span> <span class="n">screen</span> <span class="ow">or</span> <span class="n">render</span><span class="o">.</span><span class="n">Screen</span><span class="p">()</span>
@@ -111,7 +196,7 @@
 
         <span class="c"># everything has been added, run runtime_setup() on each</span>
         <span class="c"># relevant item</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="n">Scene</span><span class="p">(</span><span class="n">scene_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scene</span> <span class="o">=</span> <span class="n">scene</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scene</span><span class="o">.</span><span class="n">runtime_setup</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">start_loop</span><span class="p">()</span>
 
@@ -169,8 +254,85 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene_name</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tilemap</span><span class="p">,</span> <span class="n">player_start_position</span><span class="p">,</span>
+                 <span class="n">human_player</span><span class="p">,</span> <span class="n">npcs</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            tilemap (tiles.TileMap): --</span>
+<span class="sd">            player_start_position (tuple): x, y pixel coordinates</span>
+<span class="sd">                for the human player&#39;s starting position.</span>
+<span class="sd">            human_player (players.HumanPlayer): --</span>
+<span class="sd">            npcs (List[players.Npc]): --</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tilemap</span> <span class="o">=</span> <span class="n">tilemap</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_start_position</span> <span class="o">=</span> <span class="n">player_start_position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">human_player</span> <span class="o">=</span> <span class="n">human_player</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npcs</span> <span class="o">=</span> <span class="n">npcs</span> <span class="ow">or</span> <span class="p">[]</span>
+
+    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="Scene.create_human_player"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.Scene.create_human_player">[docs]</a>    <span class="k">def</span> <span class="nf">create_human_player</span><span class="p">(</span><span class="n">start_position</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Currently mostly scaffolding for creating/loading the</span>
+<span class="sd">        human character into the scene.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            start_position (tuple): x, y pixel coordinates</span>
+<span class="sd">                for the human player&#39;s starting position.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            player.HumanPlayer: --</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># .. create player with player scene data</span>
+        <span class="n">hat</span> <span class="o">=</span> <span class="n">animations</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">(</span><span class="s">&#39;hat&#39;</span><span class="p">)</span>
+        <span class="n">human_walkabout</span> <span class="o">=</span> <span class="n">animations</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">,</span>
+                                               <span class="n">position</span><span class="o">=</span><span class="n">start_position</span><span class="p">,</span>
+                                               <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">hat</span><span class="p">])</span>
+        <span class="n">velocity</span> <span class="o">=</span> <span class="n">physics</span><span class="o">.</span><span class="n">Velocity</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+        <span class="n">human_player</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">HumanPlayer</span><span class="p">(</span><span class="n">walkabout</span><span class="o">=</span><span class="n">human_walkabout</span><span class="p">,</span>
+                                          <span class="n">velocity</span><span class="o">=</span><span class="n">velocity</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">human_player</span>
+</div>
+<div class="viewcode-block" id="Scene.to_tmx_resource"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.Scene.to_tmx_resource">[docs]</a>    <span class="k">def</span> <span class="nf">to_tmx_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tmx_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Scaffolding.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">pass</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Scene.from_tmx_resource"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.Scene.from_tmx_resource">[docs]</a>    <span class="k">def</span> <span class="nf">from_tmx_resource</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="n">tmx_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a scene from a Tiled editor TMX file in</span>
+<span class="sd">        the scenes resource directory.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Scene: A scene created using all compatible</span>
+<span class="sd">                data from designated TMX file.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s">&#39;resources&#39;</span><span class="p">,</span> <span class="s">&#39;scenes&#39;</span><span class="p">,</span> <span class="n">tmx_name</span> <span class="o">+</span> <span class="s">&#39;.tmx&#39;</span><span class="p">)</span>
+        <span class="n">tmx</span> <span class="o">=</span> <span class="n">TMX</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
+        <span class="n">human_player</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">create_human_player</span><span class="p">(</span><span class="n">tmx</span><span class="o">.</span><span class="n">player_start_position</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Scene</span><span class="p">(</span>
+                     <span class="n">tilemap</span><span class="o">=</span><span class="n">tmx</span><span class="o">.</span><span class="n">tilemap</span><span class="p">,</span>
+                     <span class="n">player_start_position</span><span class="o">=</span><span class="n">tmx</span><span class="o">.</span><span class="n">player_start_position</span><span class="p">,</span>
+                     <span class="n">human_player</span><span class="o">=</span><span class="n">human_player</span><span class="p">,</span>
+                     <span class="n">npcs</span><span class="o">=</span><span class="n">tmx</span><span class="o">.</span><span class="n">npcs</span>
+                    <span class="p">)</span>
+</div>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="Scene.from_resource"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.Scene.from_resource">[docs]</a>    <span class="k">def</span> <span class="nf">from_resource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scene_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The native format, and hopefully most reliable,</span>
+<span class="sd">        stable, and generally best way of saving, loading,</span>
+<span class="sd">        or creating Hypatia scenes.</span>
+
+<span class="sd">        This defines the standard by which all</span>
+<span class="sd">        other Scene constructors must follow.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">          scene_name (str): the name of the directory which corresponds</span>
@@ -178,51 +340,80 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="c"># NEW IMPL</span>
+        <span class="c"># load the scene zip from the scene resource and read</span>
+        <span class="c"># the general scene configuration, first.</span>
         <span class="n">resource</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Resource</span><span class="p">(</span><span class="s">&#39;scenes&#39;</span><span class="p">,</span> <span class="n">scene_name</span><span class="p">)</span>
         <span class="n">scene_ini</span> <span class="o">=</span> <span class="n">resource</span><span class="p">[</span><span class="s">&#39;scene.ini&#39;</span><span class="p">]</span>
-        <span class="n">tilemap_string</span> <span class="o">=</span> <span class="n">resource</span><span class="p">[</span><span class="s">&#39;tilemap.txt&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tilemap</span> <span class="o">=</span> <span class="n">tiles</span><span class="o">.</span><span class="n">TileMap</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">tilemap_string</span><span class="p">)</span>
 
-        <span class="c"># .. player start position</span>
+        <span class="c"># Construct a TileMap from the tilemap.txt</span>
+        <span class="c"># contents from the scene resource.</span>
+        <span class="n">tilemap_string</span> <span class="o">=</span> <span class="n">resource</span><span class="p">[</span><span class="s">&#39;tilemap.txt&#39;</span><span class="p">]</span>
+        <span class="n">tilemap</span> <span class="o">=</span> <span class="n">tiles</span><span class="o">.</span><span class="n">TileMap</span><span class="o">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">tilemap_string</span><span class="p">)</span>
+
+        <span class="c"># Get the player&#39;s starting position from the</span>
+        <span class="c"># general scene configuration.</span>
         <span class="n">player_start_x</span> <span class="o">=</span> <span class="n">scene_ini</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s">&#39;general&#39;</span><span class="p">,</span> <span class="s">&#39;player_start_x&#39;</span><span class="p">)</span>
         <span class="n">player_start_y</span> <span class="o">=</span> <span class="n">scene_ini</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="s">&#39;general&#39;</span><span class="p">,</span> <span class="s">&#39;player_start_y&#39;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">player_start_position</span> <span class="o">=</span> <span class="p">(</span><span class="n">player_start_x</span><span class="p">,</span> <span class="n">player_start_y</span><span class="p">)</span>
+        <span class="n">player_start_position</span> <span class="o">=</span> <span class="p">(</span><span class="n">player_start_x</span><span class="p">,</span> <span class="n">player_start_y</span><span class="p">)</span>
 
-        <span class="c"># .. create player with player scene data</span>
-        <span class="n">hat</span> <span class="o">=</span> <span class="n">animations</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">(</span><span class="s">&#39;hat&#39;</span><span class="p">)</span>
-        <span class="n">start_position</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_start_position</span>
-        <span class="n">human_walkabout</span> <span class="o">=</span> <span class="n">animations</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">(</span><span class="s">&#39;debug&#39;</span><span class="p">,</span>
-                                               <span class="n">position</span><span class="o">=</span><span class="n">start_position</span><span class="p">,</span>
-                                               <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">hat</span><span class="p">])</span>
-        <span class="n">velocity</span> <span class="o">=</span> <span class="n">physics</span><span class="o">.</span><span class="n">Velocity</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">human_player</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">HumanPlayer</span><span class="p">(</span><span class="n">walkabout</span><span class="o">=</span><span class="n">human_walkabout</span><span class="p">,</span>
-                                               <span class="n">velocity</span><span class="o">=</span><span class="n">velocity</span><span class="p">)</span>
+        <span class="c"># Create a player using the player</span>
+        <span class="c"># start position found.</span>
+        <span class="n">human_player</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_human_player</span><span class="p">(</span><span class="n">player_start_position</span><span class="p">)</span>
 
         <span class="c"># npcs.ini</span>
+        <span class="c">#</span>
+        <span class="c"># Create a list of NPCs using a configuration file</span>
+        <span class="c"># from the scene resource.</span>
         <span class="n">npcs_ini</span> <span class="o">=</span> <span class="n">resource</span><span class="p">[</span><span class="s">&#39;npcs.ini&#39;</span><span class="p">]</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">npcs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">npcs</span> <span class="o">=</span> <span class="p">[]</span>
 
+        <span class="c"># each section title is the npc&#39;s name,</span>
+        <span class="c"># each sections key/value pairs are</span>
+        <span class="c"># the NPC&#39;s attributes.</span>
         <span class="k">for</span> <span class="n">npc_name</span> <span class="ow">in</span> <span class="n">npcs_ini</span><span class="o">.</span><span class="n">sections</span><span class="p">():</span>
-            <span class="n">walkabout_name</span> <span class="o">=</span> <span class="n">npcs_ini</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">npc_name</span><span class="p">,</span> <span class="s">&#39;walkabout&#39;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">npcs_ini</span><span class="o">.</span><span class="n">has_option</span><span class="p">(</span><span class="n">npc_name</span><span class="p">,</span> <span class="s">&#39;walkabout&#39;</span><span class="p">):</span>
+                <span class="c"># The NPC&#39;s walkabout resource name</span>
+                <span class="n">walkabout_name</span> <span class="o">=</span> <span class="n">npcs_ini</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">npc_name</span><span class="p">,</span> <span class="s">&#39;walkabout&#39;</span><span class="p">)</span>
+
+            <span class="c"># the required (x, y) pixel coordinates referring</span>
+            <span class="c"># to the position of this NPC</span>
             <span class="n">position_x</span> <span class="o">=</span> <span class="n">npcs_ini</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="n">npc_name</span><span class="p">,</span> <span class="s">&#39;position_x&#39;</span><span class="p">)</span>
             <span class="n">position_y</span> <span class="o">=</span> <span class="n">npcs_ini</span><span class="o">.</span><span class="n">getint</span><span class="p">(</span><span class="n">npc_name</span><span class="p">,</span> <span class="s">&#39;position_y&#39;</span><span class="p">)</span>
             <span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="n">position_x</span><span class="p">,</span> <span class="n">position_y</span><span class="p">)</span>
 
+            <span class="c"># create the NPC&#39;s walkabout using the</span>
+            <span class="c"># designated walkabout name and position</span>
+            <span class="c"># from the NPC&#39;s config.</span>
             <span class="n">npc_walkabout</span> <span class="o">=</span> <span class="n">animations</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">(</span><span class="n">walkabout_name</span><span class="p">,</span>
                                                  <span class="n">position</span><span class="o">=</span><span class="n">position</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">npcs_ini</span><span class="o">.</span><span class="n">has_option</span><span class="p">(</span><span class="n">npc_name</span><span class="p">,</span> <span class="s">&#39;say&#39;</span><span class="p">):</span>
+                <span class="c"># Load some say text for the NPC, so when</span>
+                <span class="c"># an actor uses talk() on them, they say</span>
+                <span class="c"># this message--the say_text!</span>
                 <span class="n">say_text</span> <span class="o">=</span> <span class="n">npcs_ini</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">npc_name</span><span class="p">,</span> <span class="s">&#39;say&#39;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">say_text</span> <span class="o">=</span> <span class="bp">None</span>
 
             <span class="n">npc</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">Npc</span><span class="p">(</span><span class="n">walkabout</span><span class="o">=</span><span class="n">npc_walkabout</span><span class="p">,</span> <span class="n">say_text</span><span class="o">=</span><span class="n">say_text</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">npcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">npc</span><span class="p">)</span>
+            <span class="n">npcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">npc</span><span class="p">)</span>
 
+        <span class="k">return</span> <span class="n">Scene</span><span class="p">(</span>
+                     <span class="n">tilemap</span><span class="o">=</span><span class="n">tilemap</span><span class="p">,</span>
+                     <span class="n">player_start_position</span><span class="o">=</span><span class="n">player_start_position</span><span class="p">,</span>
+                     <span class="n">human_player</span><span class="o">=</span><span class="n">human_player</span><span class="p">,</span>
+                     <span class="n">npcs</span><span class="o">=</span><span class="n">npcs</span>
+                    <span class="p">)</span>
+</div>
 <div class="viewcode-block" id="Scene.collide_check"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.Scene.collide_check">[docs]</a>    <span class="k">def</span> <span class="nf">collide_check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rect</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Returns True if there are collisions with rect.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            rect (pygame.Rect): The area/rectangle which</span>
+<span class="sd">                to test for collisions against NPCs and</span>
+<span class="sd">                the tilemap&#39;s wallmap.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -234,7 +425,10 @@
         <span class="k">return</span> <span class="n">rect</span><span class="o">.</span><span class="n">collidelist</span><span class="p">(</span><span class="n">possible_collisions</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span>
 </div>
 <div class="viewcode-block" id="Scene.runtime_setup"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.Scene.runtime_setup">[docs]</a>    <span class="k">def</span> <span class="nf">runtime_setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize al the NPCs, tilemap, etc.</span>
+        <span class="sd">&quot;&quot;&quot;Initialize all the NPCs, tilemap, etc.</span>
+
+<span class="sd">        Is this a horrible way of doing this? I dunno,</span>
+<span class="sd">        not the fondest...</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
 
@@ -243,18 +437,148 @@
         <span class="n">objects_to_setup</span> <span class="o">=</span> <span class="n">objects_to_setup</span> <span class="o">+</span> <span class="n">npcs_to_setup</span>
 
         <span class="k">for</span> <span class="n">object_to_setup</span> <span class="ow">in</span> <span class="n">objects_to_setup</span> <span class="o">+</span> <span class="n">npcs_to_setup</span><span class="p">:</span>
-            <span class="n">object_to_setup</span><span class="o">.</span><span class="n">runtime_setup</span><span class="p">()</span></div></div>
+            <span class="n">object_to_setup</span><span class="o">.</span><span class="n">runtime_setup</span><span class="p">()</span>
+
+</div></div>
+<div class="viewcode-block" id="TMX"><a class="viewcode-back" href="../../hypatia.html#hypatia.game.TMX">[docs]</a><span class="k">class</span> <span class="nc">TMX</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;`TMX` object to represent and &quot;translate&quot;</span>
+<span class="sd">    supported Scene data from a TMX file.</span>
+
+<span class="sd">    TMX files are capable of providing the information</span>
+<span class="sd">    required to instantiate TileMap and Scene.</span>
+
+<span class="sd">    TMX file must have the following settings:</span>
+
+<span class="sd">      * orientation: orthogonal</span>
+<span class="sd">      * tile layer format: csv</span>
+<span class="sd">      * tile render order: right down</span>
+
+<span class="sd">    You must also specify the tilesheet name you want to use</span>
+<span class="sd">    in Hypatia, as your tileset image name. You may only use</span>
+<span class="sd">    one image.</span>
+
+<span class="sd">    Constants:</span>
+<span class="sd">        SUPPORTED (str): the TMX file format which is supported.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        root (ElementTree): the XML ElementTree root of the TMX file.</span>
+<span class="sd">        player_start_position (tuple): (x, y) coordinate in which</span>
+<span class="sd">            the player begins this scene at.</span>
+<span class="sd">        layers (list): a 3D list of tile IDs referring to a tile</span>
+<span class="sd">            by id in a Tilesheet. This data is extrapolated from</span>
+<span class="sd">            a CSV-format list of tile IDs.</span>
+<span class="sd">        npcs (List[players.Npc]): --</span>
+
+<span class="sd">    See Also:</span>
+<span class="sd">        http://doc.mapeditor.org/reference/tmx-map-format/</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">SUPPORTED</span> <span class="o">=</span> <span class="s">&#39;1.0&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_or_readable</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read XML from path_or_readable, validate the TMX as being</span>
+<span class="sd">        supported by Hypatia, and set all supported information as</span>
+<span class="sd">        attributes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            path_or_readable (str|file-like-object): This is</span>
+<span class="sd">                plopped right into ElementTree.parse().</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            This method is under-documented!</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c"># parse TMXML for TileMap-specific/supported data</span>
+        <span class="n">tree</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">path_or_readable</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">root</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>  <span class="c"># &lt;map ...&gt;</span>
+
+        <span class="c"># check the version first, make sure it&#39;s supported</span>
+        <span class="n">map_version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;version&#39;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">map_version</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SUPPORTED</span><span class="p">:</span>
+
+            <span class="k">raise</span> <span class="n">TMXVersionUnsupported</span><span class="p">(</span><span class="n">map_version</span><span class="p">)</span>
+
+        <span class="c"># Get the Tilesheet (tileset) name from the tileset</span>
+        <span class="n">tileset_images</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&#39;.//tileset/image&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tileset_images</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+
+            <span class="c"># too many tilesets!</span>
+            <span class="k">raise</span> <span class="n">TMXTooManyTilesheets</span><span class="p">()</span>
+
+        <span class="n">tileset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;.//tileset&#39;</span><span class="p">)</span>
+        <span class="n">tilesheet_name</span> <span class="o">=</span> <span class="n">tileset</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+
+        <span class="c"># get the 3D constructor/blueprint of TileMap,</span>
+        <span class="c"># which simply references, by integer, the</span>
+        <span class="c"># tile from tilesheet.</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">layer_data</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&quot;.//layer/data&quot;</span><span class="p">):</span>
+            <span class="n">data_encoding</span> <span class="o">=</span> <span class="n">layer_data</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;encoding&#39;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">data_encoding</span> <span class="o">!=</span> <span class="s">&#39;csv&#39;</span><span class="p">:</span>
+
+                <span class="k">raise</span> <span class="n">TMXLayersNotCSV</span><span class="p">(</span><span class="n">data_encoding</span><span class="p">)</span>
+
+            <span class="n">layer_csv</span> <span class="o">=</span> <span class="n">layer_data</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="n">layer_csv</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">)</span>
+            <span class="n">parsed_rows</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+                <span class="c"># TMX tilesets start their ids at 1, Hypatia Tilesheets</span>
+                <span class="c"># starts ids at 0.</span>
+                <span class="n">cells</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s">&#39;,&#39;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c"># trailing comma</span>
+                <span class="n">parsed_row</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">tile_id</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">tile_id</span> <span class="ow">in</span> <span class="n">cells</span><span class="p">]</span>
+                <span class="n">parsed_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parsed_row</span><span class="p">)</span>
+
+            <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">parsed_rows</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">tilemap</span> <span class="o">=</span> <span class="n">tiles</span><span class="o">.</span><span class="n">TileMap</span><span class="p">(</span><span class="n">tilesheet_name</span><span class="p">,</span> <span class="n">layers</span><span class="p">)</span>
+
+        <span class="c"># loop through objects in the object layer to find the player&#39;s</span>
+        <span class="c"># start position and NPC information.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npcs</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">player_start_position</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">for</span> <span class="n">tmx_object</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s">&quot;.//objectgroup/object&quot;</span><span class="p">):</span>
+            <span class="n">object_type</span> <span class="o">=</span> <span class="n">tmx_object</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;type&#39;</span><span class="p">]</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmx_object</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;x&#39;</span><span class="p">])</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">tmx_object</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;y&#39;</span><span class="p">])</span>
+
+            <span class="k">if</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s">&#39;player_start_position&#39;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">player_start_position</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">object_type</span> <span class="o">==</span> <span class="s">&#39;npc&#39;</span><span class="p">:</span>
+                <span class="n">properties</span> <span class="o">=</span> <span class="n">tmx_object</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s">&#39;properties&#39;</span><span class="p">)</span>
+                <span class="n">xpath</span> <span class="o">=</span> <span class="s">&quot;.//property[@name=&#39;</span><span class="si">%s</span><span class="s">&#39;]&quot;</span>
+
+                <span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+                <span class="n">walkabout_name</span> <span class="o">=</span> <span class="p">(</span><span class="n">properties</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">xpath</span> <span class="o">%</span> <span class="s">&#39;walkabout&#39;</span><span class="p">)</span><span class="o">.</span>
+                                  <span class="n">attrib</span><span class="p">[</span><span class="s">&#39;value&#39;</span><span class="p">])</span>
+                <span class="n">walkabout</span> <span class="o">=</span> <span class="n">animations</span><span class="o">.</span><span class="n">Walkabout</span><span class="p">(</span><span class="n">walkabout_name</span><span class="p">,</span> <span class="n">position</span><span class="p">)</span>
+                <span class="n">say_text</span> <span class="o">=</span> <span class="n">properties</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">xpath</span> <span class="o">%</span> <span class="s">&#39;say&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">attrib</span><span class="p">[</span><span class="s">&#39;value&#39;</span><span class="p">]</span>
+
+                <span class="n">npc</span> <span class="o">=</span> <span class="n">player</span><span class="o">.</span><span class="n">Npc</span><span class="p">(</span><span class="n">walkabout</span><span class="o">=</span><span class="n">walkabout</span><span class="p">,</span> <span class="n">say_text</span><span class="o">=</span><span class="n">say_text</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">npcs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">npc</span><span class="p">)</span>
+
+        <span class="c"># should use xpath before loading all npcs...</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">player_start_position</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+
+            <span class="k">raise</span> <span class="n">TMXMissingPlayerStartPosition</span><span class="p">()</span></div>
 </pre></div>
 
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
             <p class="logo"><a href="../../index.html">
               <img class="logo" src="../../_static/logotype-whitetext-transparentbg.png" alt="Logo"/>
             </a></p>
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
       <input type="text" name="q" />
@@ -271,7 +595,7 @@
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -280,13 +604,13 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">hypatia 0.2.25 documentation</a> &raquo;</li>
-          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">hypatia 0.2.27 documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
+    <div class="footer" role="contentinfo">
         &copy; Copyright 2015, Lillian Lynn Lemmer.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3.1.
     </div>
   </body>
 </html>
